@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>إدارة الأخبار | إدارة السنبلاوين التعليمية</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .news-admin-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .news-admin-header {
+            background: #14532d;
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .news-admin-header h1 {
+            margin-top: 0;
+        }
+
+        .news-admin-panel {
+            background: white;
+            padding: 24px;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .news-admin-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .news-admin-form .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .news-admin-form label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .news-admin-form input,
+        .news-admin-form textarea,
+        .news-admin-form select,
+        .news-search {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font: inherit;
+        }
+
+        .news-admin-form textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .news-admin-buttons,
+        .news-item-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .news-admin-buttons {
+            grid-column: 1 / -1;
+        }
+
+        .news-button {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 7px;
+            cursor: pointer;
+            font: inherit;
+            font-weight: bold;
+        }
+
+        .news-save-button {
+            background: #166534;
+            color: white;
+        }
+
+        .news-edit-button {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .news-delete-button {
+            background: #b91c1c;
+            color: white;
+        }
+
+        .news-cancel-button {
+            background: #e5e7eb;
+            color: #222;
+        }
+
+        .news-search {
+            margin-bottom: 20px;
+        }
+
+        .news-admin-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 16px;
+            overflow-wrap: anywhere;
+        }
+
+        .news-admin-item h3 {
+            margin-top: 0;
+        }
+
+        .news-admin-meta {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .news-admin-content {
+            white-space: pre-wrap;
+            line-height: 1.9;
+        }
+
+        .news-admin-status {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .news-admin-back {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 15px;
+            border-radius: 7px;
+            background: white;
+            color: #14532d;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 650px) {
+            .news-admin-container {
+                padding: 12px;
+            }
+
+            .news-admin-panel {
+                padding: 15px;
+            }
+
+            .news-admin-form {
+                grid-template-columns: 1fr;
+            }
+
+            .news-admin-form .full-width,
+            .news-admin-buttons {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body class="admin-page">
+
+    <main class="news-admin-container">
+
+        <header class="news-admin-header">
+            <h1>📰 إدارة الأخبار</h1>
+            <p>أضف أخبار الإدارة التعليمية وعدّلها واحذفها.</p>
+
+            <a href="admin.html" class="news-admin-back">
+                ← العودة إلى لوحة التحكم
+            </a>
+        </header>
+
+        <section class="news-admin-panel">
+
+            <h2 id="newsFormTitle">إضافة خبر جديد</h2>
+
+            <form id="newsForm" class="news-admin-form">
+
+                <div class="full-width">
+                    <label for="newsTitle">عنوان الخبر *</label>
+                    <input
+                        type="text"
+                        id="newsTitle"
+                        maxlength="200"
+                        required
+                        placeholder="اكتب عنوان الخبر"
+                    >
+                </div>
+
+                <div>
+                    <label for="newsCategory">تصنيف الخبر</label>
+                    <select id="newsCategory">
+                        <option value="أخبار الإدارة">أخبار الإدارة</option>
+                        <option value="أخبار المدارس">أخبار المدارس</option>
+                        <option value="الأنشطة التعليمية">الأنشطة التعليمية</option>
+                        <option value="المسابقات">المسابقات</option>
+                        <option value="الإعلانات">الإعلانات</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="newsDate">تاريخ الخبر</label>
+                    <input type="date" id="newsDate">
+                </div>
+
+                <div class="full-width">
+                    <label for="newsSummary">ملخص الخبر</label>
+                    <textarea
+                        id="newsSummary"
+                        maxlength="1000"
+                        placeholder="اكتب ملخصًا قصيرًا للخبر"
+                    ></textarea>
+                </div>
+
+                <div class="full-width">
+                    <label for="newsContent">محتوى الخبر *</label>
+                    <textarea
+                        id="newsContent"
+                        maxlength="15000"
+                        required
+                        placeholder="اكتب تفاصيل الخبر هنا"
+                    ></textarea>
+                </div>
+
+                <div class="full-width">
+    <label for="newsImage">صورة الخبر (اختياري)</label>
+
+    <input
+        type="file"
+        id="newsImage"
+        accept="image/*"
+    >
+
+    <small>اختر صورة من جهازك، ويفضل ألا يتجاوز حجمها 2 ميجابايت.</small>
+
+    <div id="newsImagePreviewContainer" hidden style="margin-top: 15px;">
+        <img
+            id="newsImagePreview"
+            alt="معاينة صورة الخبر"
+            style="max-width: 100%; width: 300px; border-radius: 10px;"
+        >
+
+        <br>
+
+        <button
+            type="button"
+            id="removeNewsImage"
+            class="news-button news-delete-button"
+            style="margin-top: 10px;"
+        >
+            إزالة الصورة
+        </button>
+    </div>
+</div>
+
+                <div class="news-admin-buttons">
+                    <button
+                        type="submit"
+                        class="news-button news-save-button"
+                        id="newsSaveButton"
+                    >
+                        إضافة الخبر
+                    </button>
+
+                    <button
+                        type="button"
+                        class="news-button news-cancel-button"
+                        id="newsCancelButton"
+                        hidden
+                    >
+                        إلغاء التعديل
+                    </button>
+                </div>
+
+            </form>
+
+            <p
+                id="newsStatus"
+                class="news-admin-status"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+        </section>
+
+        <section class="news-admin-panel">
+
+            <h2>الأخبار المسجلة</h2>
+
+            <input
+                type="search"
+                id="newsSearch"
+                class="news-search"
+                placeholder="ابحث بعنوان الخبر أو محتواه أو تصنيفه..."
+                aria-label="البحث في الأخبار"
+            >
+
+            <p id="newsCount"></p>
+
+            <div id="newsList"></div>
+
+            <p id="newsEmptyMessage" hidden>
+                لا توجد أخبار مسجلة حتى الآن.
+            </p>
+
+            <p id="newsNoResults" hidden>
+                لا توجد أخبار تطابق البحث.
+            </p>
+
+        </section>
+
+        <footer>
+            <p>تصميم وتطوير الموقع: <strong>محمد رضا السيد عباس</strong></p>
+            <p>إدارة السنبلاوين التعليمية - محافظة الدقهلية</p>
+        </footer>
+
+    </main>
+
+    <script>
+        const NEWS_STORAGE_KEY = "sanbalawin_news";
+
+        const newsForm = document.getElementById("newsForm");
+        const newsTitle = document.getElementById("newsTitle");
+        const newsCategory = document.getElementById("newsCategory");
+        const newsDate = document.getElementById("newsDate");
+        const newsSummary = document.getElementById("newsSummary");
+        const newsContent = document.getElementById("newsContent");
+     const newsImage = document.getElementById("newsImage");
+
+const newsImagePreview =
+    document.getElementById("newsImagePreview");
+
+const newsImagePreviewContainer =
+    document.getElementById("newsImagePreviewContainer");
+
+const removeNewsImage =
+    document.getElementById("removeNewsImage");
+
+let currentNewsImage = "";
+
+
+
+
+
+
+newsImage.addEventListener("change", function () {
+    const file = newsImage.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+        newsStatus.textContent = "من فضلك اختر ملف صورة صالحًا.";
+        newsImage.value = "";
+        return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+        newsStatus.textContent =
+            "حجم الصورة أكبر من 2 ميجابايت. اختر صورة أصغر.";
+
+        newsImage.value = "";
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function () {
+        currentNewsImage = reader.result;
+
+        newsImagePreview.src = currentNewsImage;
+        newsImagePreviewContainer.hidden = false;
+
+        newsStatus.textContent = "تم اختيار الصورة بنجاح.";
+    };
+
+    reader.onerror = function () {
+        newsStatus.textContent = "تعذر قراءة الصورة.";
+    };
+
+    reader.readAsDataURL(file);
+});
+
+removeNewsImage.addEventListener("click", function () {
+    currentNewsImage = "";
+
+    newsImage.value = "";
+    newsImagePreview.removeAttribute("src");
+    newsImagePreviewContainer.hidden = true;
+
+    newsStatus.textContent = "تمت إزالة الصورة.";
+});
+
+
+
+
+
+
+        const newsList = document.getElementById("newsList");
+        const newsSearch = document.getElementById("newsSearch");
+        const newsCount = document.getElementById("newsCount");
+
+        const newsStatus = document.getElementById("newsStatus");
+        const newsFormTitle = document.getElementById("newsFormTitle");
+        const newsSaveButton = document.getElementById("newsSaveButton");
+        const newsCancelButton = document.getElementById("newsCancelButton");
+
+        const newsEmptyMessage =
+            document.getElementById("newsEmptyMessage");
+
+        const newsNoResults =
+            document.getElementById("newsNoResults");
+
+        let newsItems = [];
+        let editingNewsId = null;
+
+        function makeNewsId() {
+            if (window.crypto &&
+                typeof window.crypto.randomUUID === "function") {
+                return window.crypto.randomUUID();
+            }
+
+            return Date.now().toString(36) +
+                Math.random().toString(36).slice(2);
+        }
+
+        function loadNews() {
+            try {
+                const saved = localStorage.getItem(NEWS_STORAGE_KEY);
+
+                if (saved === null) {
+                    newsItems = [];
+                    return;
+                }
+
+                const parsed = JSON.parse(saved);
+
+                if (!Array.isArray(parsed)) {
+                    throw new Error("صيغة الأخبار غير صحيحة.");
+                }
+
+                newsItems = parsed.map(function (item) {
+                    return {
+                        ...item,
+                        id: item.id || makeNewsId(),
+                        title: String(item.title ?? item.headline ?? ""),
+                        category: String(item.category ?? "أخبار الإدارة"),
+                        date: String(item.date ?? ""),
+                        summary: String(item.summary ?? ""),
+                        content: String(item.content ?? item.body ?? ""),
+                        image: String(item.image ?? "")
+                    };
+                });
+
+            } catch (error) {
+                console.error("تعذر تحميل الأخبار:", error);
+
+                newsItems = [];
+
+                newsStatus.textContent =
+                    "تعذر قراءة الأخبار المحفوظة. لم يتم تعديل بيانات التخزين.";
+            }
+        }
+
+        function saveNews() {
+            try {
+                localStorage.setItem(
+                    NEWS_STORAGE_KEY,
+                    JSON.stringify(newsItems)
+                );
+
+                return true;
+
+            } catch (error) {
+                console.error("تعذر حفظ الأخبار:", error);
+
+                newsStatus.textContent =
+                    "تعذر حفظ الأخبار. تحقق من إعدادات المتصفح ومساحة التخزين.";
+
+                return false;
+            }
+        }
+
+        function addTextElement(parent, tag, text, className) {
+            const element = document.createElement(tag);
+            element.textContent = text;
+
+            if (className) {
+                element.className = className;
+            }
+
+            parent.appendChild(element);
+            return element;
+        }
+
+        function renderNews() {
+            newsList.replaceChildren();
+
+            const query = newsSearch.value
+                .trim()
+                .toLocaleLowerCase("ar");
+
+            const filtered = newsItems.filter(function (item) {
+                const text = [
+                    item.title,
+                    item.category,
+                    item.summary,
+                    item.content
+                ].join(" ").toLocaleLowerCase("ar");
+
+                return text.includes(query);
+            });
+
+            newsCount.textContent =
+                "عدد الأخبار: " + newsItems.length +
+                " | نتائج البحث: " + filtered.length;
+
+            newsEmptyMessage.hidden = newsItems.length !== 0;
+
+            newsNoResults.hidden =
+                newsItems.length === 0 || filtered.length !== 0;
+
+            filtered.forEach(function (item) {
+                const article = document.createElement("article");
+                article.className = "news-admin-item";
+
+                addTextElement(article, "h3", item.title);
+
+                addTextElement(
+                    article,
+                    "p",
+                    "التصنيف: " + item.category +
+                    " | التاريخ: " + (item.date || "غير محدد"),
+                    "news-admin-meta"
+                );
+
+                if (item.summary) {
+                    addTextElement(
+                        article,
+                        "p",
+                        "الملخص: " + item.summary
+                    );
+                }
+
+                addTextElement(
+                    article,
+                    "p",
+                    item.content,
+                    "news-admin-content"
+                );
+
+                if (item.image) {
+                    const imageLink = document.createElement("a");
+                    imageLink.href = item.image;
+                    imageLink.target = "_blank";
+                    imageLink.rel = "noopener noreferrer";
+                    imageLink.textContent = "فتح صورة الخبر";
+
+                    article.appendChild(imageLink);
+                }
+
+                const actions = document.createElement("div");
+                actions.className = "news-item-actions";
+
+                const editButton = document.createElement("button");
+                editButton.type = "button";
+                editButton.className =
+                    "news-button news-edit-button";
+                editButton.textContent = "تعديل";
+
+                editButton.addEventListener("click", function () {
+                    editNews(item.id);
+                });
+
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.className =
+                    "news-button news-delete-button";
+                deleteButton.textContent = "حذف";
+
+                deleteButton.addEventListener("click", function () {
+                    deleteNews(item.id);
+                });
+
+                actions.append(editButton, deleteButton);
+                article.appendChild(actions);
+
+                newsList.appendChild(article);
+            });
+        }
+
+        function resetNewsForm() {
+            newsForm.reset();
+            editingNewsId = null;
+
+            newsFormTitle.textContent = "إضافة خبر جديد";
+            newsSaveButton.textContent = "إضافة الخبر";
+            newsCancelButton.hidden = true;
+        
+
+
+
+            currentNewsImage = "";
+newsImage.value = "";
+newsImagePreview.removeAttribute("src");
+newsImagePreviewContainer.hidden = true;
+
+
+
+        }
+
+        function editNews(id) {
+            const item = newsItems.find(function (news) {
+                return news.id === id;
+            });
+
+            if (!item) {
+                newsStatus.textContent =
+                    "لم يتم العثور على الخبر المطلوب.";
+                return;
+            }
+
+            editingNewsId = id;
+
+            newsTitle.value = item.title;
+            newsCategory.value = item.category;
+            newsDate.value = item.date;
+            newsSummary.value = item.summary;
+            newsContent.value = item.content;
+          currentNewsImage = item.image || "";
+
+if (currentNewsImage) {
+    newsImagePreview.src = currentNewsImage;
+    newsImagePreviewContainer.hidden = false;
+} else {
+    newsImagePreview.removeAttribute("src");
+    newsImagePreviewContainer.hidden = true;
+}
+
+newsImage.value = "";
+
+            newsFormTitle.textContent = "تعديل الخبر";
+            newsSaveButton.textContent = "حفظ التعديلات";
+            newsCancelButton.hidden = false;
+
+            newsStatus.textContent =
+                "عدّل البيانات ثم اضغط حفظ التعديلات.";
+
+            newsForm.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+            newsTitle.focus();
+        }
+
+        function deleteNews(id) {
+            const item = newsItems.find(function (news) {
+                return news.id === id;
+            });
+
+            if (!item) {
+                return;
+            }
+
+            const confirmed = window.confirm(
+                'هل تريد حذف الخبر "' + item.title + '"؟'
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            const previousItems = newsItems;
+
+            newsItems = newsItems.filter(function (news) {
+                return news.id !== id;
+            });
+
+            if (!saveNews()) {
+                newsItems = previousItems;
+                return;
+            }
+
+            if (editingNewsId === id) {
+                resetNewsForm();
+            }
+
+            newsStatus.textContent = "تم حذف الخبر بنجاح.";
+            renderNews();
+        }
+
+        newsForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const title = newsTitle.value.trim();
+            const category = newsCategory.value;
+            const date = newsDate.value;
+            const summary = newsSummary.value.trim();
+            const content = newsContent.value.trim();
+          const image = currentNewsImage;
+            if (!title || !content) {
+                newsStatus.textContent =
+                    "يرجى كتابة عنوان الخبر ومحتواه.";
+                return;
+            }
+
+          
+
+            const previousItems = newsItems.map(function (item) {
+                return { ...item };
+            });
+
+            if (editingNewsId !== null) {
+                newsItems = newsItems.map(function (item) {
+                    if (item.id !== editingNewsId) {
+                        return item;
+                    }
+
+                    return {
+                        ...item,
+                        title: title,
+                        category: category,
+                        date: date,
+                        summary: summary,
+                        content: content,
+                        image: image
+                    };
+                });
+
+            } else {
+                newsItems.unshift({
+                    id: makeNewsId(),
+                    title: title,
+                    category: category,
+                    date: date,
+                    summary: summary,
+                    content: content,
+                    image: image,
+                    createdAt: new Date().toISOString()
+                });
+            }
+
+            if (!saveNews()) {
+                newsItems = previousItems;
+                return;
+            }
+
+            const wasEditing = editingNewsId !== null;
+
+            resetNewsForm();
+
+            newsStatus.textContent = wasEditing
+                ? "تم تعديل الخبر بنجاح."
+                : "تمت إضافة الخبر بنجاح.";
+
+            renderNews();
+        });
+
+        newsCancelButton.addEventListener("click", function () {
+            resetNewsForm();
+            newsStatus.textContent = "تم إلغاء التعديل.";
+        });
+
+        newsSearch.addEventListener("input", renderNews);
+
+        loadNews();
+        renderNews();
+
+        if (!newsDate.value) {
+            newsDate.value = new Date().toLocaleDateString("en-CA");
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "school-results-system",
+  "version": "1.0.0",
+  "description": "School student results system",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "express": "^5.3.0",
+    "express-session": "^1.19.0"
+  }
+}

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>الاستعلام عن النتائج | إدارة السنبلاوين التعليمية</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f6fa;
+            color: #243247;
+        }
+
+        .results-header {
+            background: #123c69;
+            color: white;
+            padding: 25px 16px;
+            text-align: center;
+        }
+
+        .results-header h1 {
+            margin: 0 0 10px;
+            font-size: 28px;
+        }
+
+        .results-header p {
+            margin: 0;
+            line-height: 1.8;
+        }
+
+        .results-container {
+            width: min(900px, 94%);
+            margin: 30px auto;
+        }
+
+        .results-panel {
+            background: white;
+            padding: 26px;
+            border-radius: 14px;
+            box-shadow: 0 5px 22px rgba(0, 0, 0, 0.07);
+            margin-bottom: 22px;
+        }
+
+        .results-panel h2 {
+            margin-top: 0;
+            color: #123c69;
+        }
+
+        .demo-notice {
+            background: #fff4d6;
+            border-right: 5px solid #e6a700;
+            padding: 14px;
+            border-radius: 7px;
+            line-height: 1.9;
+            margin-bottom: 22px;
+        }
+
+        .results-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            background: white;
+            font: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: 2px solid #90b7e3;
+            border-color: #123c69;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .fee-row {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: #edf4fb;
+            border-radius: 8px;
+            padding: 16px;
+        }
+
+        .fee-amount {
+            color: #176b45;
+            font-size: 23px;
+            font-weight: bold;
+        }
+
+        .primary-btn {
+            width: 100%;
+            padding: 14px;
+            border: 0;
+            border-radius: 8px;
+            background: #176b45;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .primary-btn:hover {
+            background: #105538;
+        }
+
+        .secondary-btn {
+            padding: 11px 16px;
+            border: 0;
+            border-radius: 7px;
+            background: #e8edf3;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .message {
+            margin-top: 15px;
+            line-height: 1.8;
+            font-weight: bold;
+        }
+
+        .result-card {
+            display: none;
+        }
+
+        .student-info {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .info-item {
+            padding: 14px;
+            background: #f3f6fa;
+            border-radius: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .info-item strong {
+            display: block;
+            color: #526176;
+            margin-bottom: 7px;
+        }
+
+        .grades-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .grades-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 350px;
+        }
+
+        .grades-table th,
+        .grades-table td {
+            border: 1px solid #dbe2ea;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .grades-table th {
+            background: #123c69;
+            color: white;
+        }
+
+        .total-box {
+            margin-top: 20px;
+            padding: 18px;
+            background: #e7f5ec;
+            border-radius: 9px;
+            text-align: center;
+        }
+
+        .total-box strong {
+            font-size: 25px;
+            color: #176b45;
+        }
+
+        .result-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .result-actions button {
+            flex: 1;
+        }
+
+        .site-footer {
+            text-align: center;
+            padding: 22px 15px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 600px) {
+            .results-form,
+            .student-info {
+                grid-template-columns: 1fr;
+            }
+
+            .results-panel {
+                padding: 18px;
+            }
+
+            .results-header h1 {
+                font-size: 23px;
+            }
+
+            .full-width,
+            .fee-row {
+                grid-column: 1;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+            }
+
+            .results-header,
+            #searchPanel,
+            .site-footer,
+            .result-actions,
+            #resultMessage {
+                display: none !important;
+            }
+
+            .results-container {
+                width: 100%;
+                margin: 0;
+            }
+
+            .results-panel {
+                box-shadow: none;
+            }
+
+            .result-card {
+                display: block !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="results-header">
+        <h1>الاستعلام عن نتائج الطلاب</h1>
+        <p>إدارة السنبلاوين التعليمية - محافظة الدقهلية</p>
+        <p>بوابة تجريبية للاستعلام عن النتائج الدراسية</p>
+    </header>
+
+    <main class="results-container">
+
+        <section class="results-panel" id="searchPanel">
+
+            <h2>بيانات الطالب</h2>
+
+            <div class="demo-notice">
+                <strong>نسخة تجريبية:</strong>
+                هذه الصفحة مخصصة لاختبار عرض النتائج باستخدام بيانات وهمية.
+                لا توجد مدفوعات حقيقية في هذه النسخة، ولا تدخل بيانات شخصية حقيقية.
+            </div>
+
+            <form id="studentSearchForm" class="results-form">
+
+                <div class="form-group">
+                    <label for="schoolSelect">المدرسة</label>
+                    <select id="schoolSelect" required>
+                        <option value="">جارٍ تحميل المدارس...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="stageSelect">الصف الدراسي</label>
+                    <select id="stageSelect" required>
+                        <option value="">اختر الصف الدراسي</option>
+                        <option value="الصف الأول الابتدائي">الصف الأول الابتدائي</option>
+                        <option value="الصف الثاني الابتدائي">الصف الثاني الابتدائي</option>
+                        <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
+                        <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
+                        <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
+                        <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
+                        <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
+                        <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
+                        <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
+                        <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
+                        <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+                        <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="seatNumber">رقم الجلوس</label>
+                    <input
+                        type="text"
+                        id="seatNumber"
+                        maxlength="30"
+                        placeholder="أدخل رقم الجلوس التجريبي"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="studentCode">رمز التحقق التجريبي</label>
+                    <input
+                        type="text"
+                        id="studentCode"
+                        maxlength="30"
+                        placeholder="أدخل الرمز الذي سجلته في لوحة الإدارة"
+                        required
+                    >
+                </div>
+
+                <div class="fee-row">
+                    <span>رسوم الاستعلام المخططة</span>
+                    <span class="fee-amount">20 جنيهًا</span>
+                </div>
+
+                <div class="full-width">
+                    <button type="submit" class="primary-btn">
+                        التحقق من النتيجة التجريبية
+                    </button>
+
+                    <p id="resultMessage" class="message" role="status"></p>
+                </div>
+
+            </form>
+
+        </section>
+
+        <section class="results-panel result-card" id="resultCard">
+
+            <h2>نتيجة الطالب</h2>
+
+            <div class="student-info">
+                <div class="info-item">
+                    <strong>اسم الطالب</strong>
+                    <span id="outName"></span>
+                </div>
+
+                <div class="info-item">
+                    <strong>رقم الجلوس</strong>
+                    <span id="outSeat"></span>
+                </div>
+
+                <div class="info-item">
+                    <strong>المدرسة</strong>
+                    <span id="outSchool"></span>
+                </div>
+
+                <div class="info-item">
+                    <strong>الصف الدراسي</strong>
+                    <span id="outStage"></span>
+                </div>
+            </div>
+
+            <h3>درجات المواد</h3>
+
+            <div class="grades-table-wrapper">
+                <table class="grades-table">
+                    <thead>
+                        <tr>
+                            <th>المادة</th>
+                            <th>الدرجة</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="gradesBody"></tbody>
+                </table>
+            </div>
+
+            <div class="total-box">
+                <p>المجموع الكلي</p>
+                <strong id="outTotal"></strong>
+            </div>
+
+            <div class="result-actions">
+                <button type="button" class="primary-btn" id="printBtn">
+                    طباعة النتيجة
+                </button>
+
+                <button type="button" class="secondary-btn" id="backBtn">
+                    استعلام جديد
+                </button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <p>
+            تصميم وتطوير الموقع:
+            <strong>محمد رضا السيد عباس</strong>
+        </p>
+
+        <p>إدارة السنبلاوين التعليمية - محافظة الدقهلية</p>
+        <p>نسخة تجريبية - لا تُستخدم لإعلان نتائج رسمية.</p>
+    </footer>
+
+    <script>
+        "use strict";
+
+        const RESULTS_KEY = "sanbalawin_student_results";
+        const SCHOOLS_KEY = "sanbalawin_schools";
+
+        const searchForm = document.getElementById("studentSearchForm");
+        const schoolSelect = document.getElementById("schoolSelect");
+        const stageSelect = document.getElementById("stageSelect");
+        const seatInput = document.getElementById("seatNumber");
+        const codeInput = document.getElementById("studentCode");
+        const message = document.getElementById("resultMessage");
+        const resultCard = document.getElementById("resultCard");
+
+        const subjectNames = {
+            arabic: "اللغة العربية",
+            english: "اللغة الإنجليزية",
+            math: "الرياضيات",
+            science: "العلوم",
+            social: "الدراسات الاجتماعية"
+        };
+
+        function readStorage(key) {
+            try {
+                const value = JSON.parse(localStorage.getItem(key) || "[]");
+                return Array.isArray(value) ? value : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function loadSchools() {
+            const schools = readStorage(SCHOOLS_KEY);
+
+            schoolSelect.replaceChildren();
+
+            const placeholder = document.createElement("option");
+            placeholder.value = "";
+            placeholder.textContent = schools.length
+                ? "اختر المدرسة"
+                : "لا توجد مدارس مسجلة";
+            schoolSelect.appendChild(placeholder);
+
+            schools.forEach(function (school) {
+                const name = school.name || school.schoolName;
+                if (!name) return;
+
+                const option = document.createElement("option");
+                option.value = name;
+                option.textContent = name;
+                schoolSelect.appendChild(option);
+            });
+
+            if (!schools.length) {
+                const option = document.createElement("option");
+                option.value = "مدرسة تجريبية";
+                option.textContent = "مدرسة تجريبية للاختبار";
+                schoolSelect.appendChild(option);
+            }
+        }
+
+        function showMessage(text, isError = true) {
+            message.textContent = text;
+            message.style.color = isError ? "#b42318" : "#176b45";
+        }
+
+        function setText(id, value) {
+            document.getElementById(id).textContent = value ?? "";
+        }
+
+        function showResult(student) {
+            setText("outName", student.name);
+            setText("outSeat", student.seatNumber);
+            setText("outSchool", student.school);
+            setText("outStage", student.stage);
+            setText("outTotal", student.total);
+
+            const gradesBody = document.getElementById("gradesBody");
+            gradesBody.replaceChildren();
+
+            Object.entries(subjectNames).forEach(function ([key, name]) {
+                const row = document.createElement("tr");
+
+                const nameCell = document.createElement("td");
+                nameCell.textContent = name;
+
+                const gradeCell = document.createElement("td");
+                gradeCell.textContent =
+                    student.grades && student.grades[key] !== undefined
+                        ? student.grades[key]
+                        : "—";
+
+                row.append(nameCell, gradeCell);
+                gradesBody.appendChild(row);
+            });
+
+            resultCard.style.display = "block";
+            document.getElementById("searchPanel").style.display = "none";
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        searchForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            resultCard.style.display = "none";
+
+            const school = schoolSelect.value;
+            const stage = stageSelect.value;
+            const seat = seatInput.value.trim();
+            const code = codeInput.value.trim();
+
+            if (!school || !stage || !seat || !code) {
+                showMessage("يرجى إدخال جميع البيانات المطلوبة.");
+                return;
+            }
+
+            const results = readStorage(RESULTS_KEY);
+
+            const student = results.find(function (item) {
+                return item.school === school &&
+                    item.stage === stage &&
+                    item.seatNumber === seat &&
+                    item.studentCode === code &&
+                    item.status === "published";
+            });
+
+            if (!student) {
+                showMessage(
+                    "لم يتم العثور على نتيجة منشورة تطابق البيانات المدخلة. تأكد من بيانات الاختبار وحالة نشر النتيجة."
+                );
+                return;
+            }
+
+            showMessage("تم العثور على نتيجة تجريبية.", false);
+            showResult(student);
+        });
+
+        document.getElementById("backBtn").addEventListener("click", function () {
+            resultCard.style.display = "none";
+            document.getElementById("searchPanel").style.display = "block";
+            searchForm.reset();
+            showMessage("");
+        });
+
+        document.getElementById("printBtn").addEventListener("click", function () {
+            window.print();
+        });
+
+        loadSchools();
+    </script>
+
+</body>
+</html>

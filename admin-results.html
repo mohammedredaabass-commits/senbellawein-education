@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>إدارة نتائج الطلاب | إدارة السنبلاوين التعليمية</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .results-admin {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .results-panel {
+            background: #fff;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
+        }
+
+        .results-panel h2 {
+            margin-top: 0;
+            color: #123c69;
+        }
+
+        .results-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #ccd3dc;
+            border-radius: 8px;
+            font: inherit;
+        }
+
+        .subjects-title {
+            grid-column: 1 / -1;
+            margin: 12px 0 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .subjects-grid {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .results-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .results-btn {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font: inherit;
+            font-weight: bold;
+        }
+
+        .save-btn {
+            background: #176b45;
+            color: #fff;
+        }
+
+        .reset-btn {
+            background: #e8edf3;
+            color: #222;
+        }
+
+        .edit-btn {
+            background: #e6a700;
+            color: #222;
+        }
+
+        .delete-btn {
+            background: #b42318;
+            color: #fff;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #e0e4e8;
+        }
+
+        .results-table th {
+            background: #123c69;
+            color: #fff;
+        }
+
+        .results-table tr:nth-child(even) {
+            background: #f6f8fb;
+        }
+
+        .table-actions {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .table-actions button {
+            padding: 7px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font: inherit;
+        }
+
+        .notice {
+            padding: 13px;
+            background: #fff4d6;
+            border-right: 4px solid #e6a700;
+            border-radius: 6px;
+            margin-bottom: 18px;
+            line-height: 1.8;
+        }
+
+        .status-text {
+            margin-top: 12px;
+            font-weight: bold;
+        }
+
+        .empty-message {
+            padding: 20px;
+            text-align: center;
+            color: #666;
+        }
+
+        @media (max-width: 700px) {
+            .results-form,
+            .subjects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-panel {
+                padding: 16px;
+            }
+
+            .form-group.full,
+            .subjects-title,
+            .subjects-grid,
+            .results-actions {
+                grid-column: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="admin-page">
+
+    <header class="admin-header">
+        <div class="admin-header-content">
+
+            <div>
+                <h1>إدارة نتائج الطلاب</h1>
+                <p>إدارة السنبلاوين التعليمية - محافظة الدقهلية</p>
+            </div>
+
+            <a href="admin.html" class="admin-home-link">
+                العودة إلى لوحة التحكم
+            </a>
+
+        </div>
+    </header>
+
+    <main class="results-admin">
+
+        <section class="results-panel">
+
+            <h2 id="formTitle">إضافة نتيجة طالب</h2>
+
+            <div class="notice">
+                <strong>نسخة تجريبية:</strong>
+                البيانات في هذه الصفحة تُحفظ في المتصفح باستخدام
+                localStorage، وليست قاعدة بيانات آمنة.
+                استخدم بيانات طلاب وهمية فقط، ولا تدخل أرقامًا قومية حقيقية.
+            </div>
+
+            <form id="resultForm" class="results-form">
+
+                <div class="form-group">
+                    <label for="schoolSelect">المدرسة</label>
+                    <select id="schoolSelect" required>
+                        <option value="">جارٍ تحميل المدارس...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="stageSelect">الصف الدراسي</label>
+                    <select id="stageSelect" required>
+                        <option value="">اختر الصف الدراسي</option>
+                        <option value="الصف الأول الابتدائي">الصف الأول الابتدائي</option>
+                        <option value="الصف الثاني الابتدائي">الصف الثاني الابتدائي</option>
+                        <option value="الصف الثالث الابتدائي">الصف الثالث الابتدائي</option>
+                        <option value="الصف الرابع الابتدائي">الصف الرابع الابتدائي</option>
+                        <option value="الصف الخامس الابتدائي">الصف الخامس الابتدائي</option>
+                        <option value="الصف السادس الابتدائي">الصف السادس الابتدائي</option>
+                        <option value="الصف الأول الإعدادي">الصف الأول الإعدادي</option>
+                        <option value="الصف الثاني الإعدادي">الصف الثاني الإعدادي</option>
+                        <option value="الصف الثالث الإعدادي">الصف الثالث الإعدادي</option>
+                        <option value="الصف الأول الثانوي">الصف الأول الثانوي</option>
+                        <option value="الصف الثاني الثانوي">الصف الثاني الثانوي</option>
+                        <option value="الصف الثالث الثانوي">الصف الثالث الثانوي</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentName">اسم الطالب</label>
+                    <input
+                        type="text"
+                        id="studentName"
+                        maxlength="150"
+                        placeholder="أدخل اسمًا تجريبيًا"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="seatNumber">رقم الجلوس</label>
+                    <input
+                        type="text"
+                        id="seatNumber"
+                        maxlength="30"
+                        placeholder="مثال: 12345"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="studentCode">رمز تحقق تجريبي</label>
+                    <input
+                        type="text"
+                        id="studentCode"
+                        maxlength="30"
+                        placeholder="رمز وهمي للاختبار فقط"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="publishStatus">حالة النتيجة</label>
+                    <select id="publishStatus" required>
+                        <option value="hidden">غير منشورة</option>
+                        <option value="published">منشورة</option>
+                    </select>
+                </div>
+
+                <h3 class="subjects-title">درجات المواد</h3>
+
+                <div class="subjects-grid">
+
+                    <div class="form-group">
+                        <label for="arabic">اللغة العربية</label>
+                        <input type="number" id="arabic" min="0" max="100" value="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="english">اللغة الإنجليزية</label>
+                        <input type="number" id="english" min="0" max="100" value="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="math">الرياضيات</label>
+                        <input type="number" id="math" min="0" max="100" value="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="science">العلوم</label>
+                        <input type="number" id="science" min="0" max="100" value="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="social">الدراسات الاجتماعية</label>
+                        <input type="number" id="social" min="0" max="100" value="0" required>
+                    </div>
+
+                </div>
+
+                <div class="form-group full">
+                    <label for="total">المجموع الكلي</label>
+                    <input type="number" id="total" readonly>
+                </div>
+
+                <div class="results-actions">
+
+                    <button type="submit" class="results-btn save-btn" id="saveBtn">
+                        حفظ النتيجة
+                    </button>
+
+                    <button type="button" class="results-btn reset-btn" id="resetBtn">
+                        تفريغ الحقول
+                    </button>
+
+                </div>
+
+                <p id="formMessage" class="status-text full" role="status"></p>
+
+            </form>
+
+        </section>
+
+        <section class="results-panel">
+
+            <h2>النتائج المسجلة</h2>
+
+            <div class="form-group" style="margin-bottom: 18px;">
+                <label for="searchResults">البحث عن طالب</label>
+                <input
+                    type="search"
+                    id="searchResults"
+                    placeholder="ابحث بالاسم أو رقم الجلوس أو المدرسة"
+                >
+            </div>
+
+            <div class="table-wrapper">
+
+                <table class="results-table">
+
+                    <thead>
+                        <tr>
+                            <th>الطالب</th>
+                            <th>رقم الجلوس</th>
+                            <th>المدرسة</th>
+                            <th>الصف</th>
+                            <th>المجموع</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="resultsTableBody"></tbody>
+
+                </table>
+
+            </div>
+
+            <p id="emptyMessage" class="empty-message">
+                لا توجد نتائج مسجلة حتى الآن.
+            </p>
+
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-bottom">
+            <p>
+                تصميم وتطوير الموقع:
+                <strong>محمد رضا السيد عباس</strong>
+            </p>
+
+            <p>إدارة السنبلاوين التعليمية - محافظة الدقهلية</p>
+            <p>نظام تجريبي لإدارة النتائج.</p>
+        </div>
+    </footer>
+
+    <script>
+        "use strict";
+
+        const STORAGE_KEY = "sanbalawin_student_results";
+        const SCHOOLS_KEY = "sanbalawin_schools";
+
+        const resultForm = document.getElementById("resultForm");
+        const schoolSelect = document.getElementById("schoolSelect");
+        const stageSelect = document.getElementById("stageSelect");
+        const studentName = document.getElementById("studentName");
+        const seatNumber = document.getElementById("seatNumber");
+        const studentCode = document.getElementById("studentCode");
+        const publishStatus = document.getElementById("publishStatus");
+        const totalInput = document.getElementById("total");
+        const resultsTableBody = document.getElementById("resultsTableBody");
+        const emptyMessage = document.getElementById("emptyMessage");
+        const searchResults = document.getElementById("searchResults");
+        const formMessage = document.getElementById("formMessage");
+        const formTitle = document.getElementById("formTitle");
+        const saveBtn = document.getElementById("saveBtn");
+
+        const subjectFields = [
+            "arabic",
+            "english",
+            "math",
+            "science",
+            "social"
+        ];
+
+        let editingId = null;
+        let results = loadResults();
+
+        function loadResults() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+                return Array.isArray(saved) ? saved : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveResults() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(results));
+        }
+
+        function createId() {
+            if (window.crypto && crypto.randomUUID) {
+                return crypto.randomUUID();
+            }
+
+            return Date.now().toString(36) +
+                Math.random().toString(36).slice(2);
+        }
+
+        function loadSchools() {
+            let schools = [];
+
+            try {
+                schools = JSON.parse(localStorage.getItem(SCHOOLS_KEY) || "[]");
+            } catch {
+                schools = [];
+            }
+
+            schoolSelect.replaceChildren();
+
+            const firstOption = document.createElement("option");
+            firstOption.value = "";
+            firstOption.textContent = schools.length
+                ? "اختر المدرسة"
+                : "لا توجد مدارس مسجلة";
+            schoolSelect.appendChild(firstOption);
+
+            schools.forEach(function (school, index) {
+                const name = school.name || school.schoolName;
+
+                if (!name) return;
+
+                const option = document.createElement("option");
+                option.value = name;
+                option.textContent = name;
+                schoolSelect.appendChild(option);
+            });
+
+            if (schools.length === 0) {
+                const option = document.createElement("option");
+                option.value = "مدرسة تجريبية";
+                option.textContent = "مدرسة تجريبية للاختبار";
+                schoolSelect.appendChild(option);
+
+                schoolSelect.addEventListener("change", function () {
+                    if (schoolSelect.value === "مدرسة تجريبية") {
+                        return;
+                    }
+                }, { once: true });
+            }
+        }
+
+        function calculateTotal() {
+            const total = subjectFields.reduce(function (sum, id) {
+                const field = document.getElementById(id);
+                return sum + (Number(field.value) || 0);
+            }, 0);
+
+            totalInput.value = total;
+        }
+
+        subjectFields.forEach(function (id) {
+            document.getElementById(id).addEventListener("input", calculateTotal);
+        });
+
+        function getSubjectGrades() {
+            const grades = {};
+
+            subjectFields.forEach(function (id) {
+                grades[id] = Number(document.getElementById(id).value);
+            });
+
+            return grades;
+        }
+
+        function showMessage(message, isError = false) {
+            formMessage.textContent = message;
+            formMessage.style.color = isError ? "#b42318" : "#176b45";
+        }
+
+        function resetForm() {
+            resultForm.reset();
+            editingId = null;
+
+            subjectFields.forEach(function (id) {
+                document.getElementById(id).value = 0;
+            });
+
+            calculateTotal();
+
+            formTitle.textContent = "إضافة نتيجة طالب";
+            saveBtn.textContent = "حفظ النتيجة";
+            showMessage("");
+        }
+
+        resultForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const name = studentName.value.trim();
+            const seat = seatNumber.value.trim();
+            const code = studentCode.value.trim();
+            const school = schoolSelect.value;
+            const stage = stageSelect.value;
+
+            if (!name || !seat || !code || !school || !stage) {
+                showMessage("يرجى استكمال جميع البيانات.", true);
+                return;
+            }
+
+            const grades = getSubjectGrades();
+
+            for (const id of subjectFields) {
+                const grade = grades[id];
+
+                if (!Number.isFinite(grade) || grade < 0 || grade > 100) {
+                    showMessage("تأكد أن درجات المواد بين صفر و100.", true);
+                    return;
+                }
+            }
+
+            const duplicate = results.some(function (item) {
+                return item.id !== editingId &&
+                    item.seatNumber === seat &&
+                    item.school === school &&
+                    item.stage === stage;
+            });
+
+            if (duplicate) {
+                showMessage(
+                    "رقم الجلوس مسجل بالفعل لهذه المدرسة والصف.",
+                    true
+                );
+                return;
+            }
+
+            const record = {
+                id: editingId || createId(),
+                name: name,
+                seatNumber: seat,
+                studentCode: code,
+                school: school,
+                stage: stage,
+                grades: grades,
+                total: totalInput.value,
+                status: publishStatus.value,
+                updatedAt: new Date().toISOString()
+            };
+
+            if (editingId) {
+                const index = results.findIndex(function (item) {
+                    return item.id === editingId;
+                });
+
+                if (index !== -1) {
+                    results[index] = record;
+                }
+            } else {
+                results.push(record);
+            }
+
+            try {
+                saveResults();
+            } catch (error) {
+                showMessage(
+                    "تعذر حفظ البيانات. تحقق من مساحة التخزين المتاحة.",
+                    true
+                );
+                return;
+            }
+
+            renderResults();
+            resetForm();
+            showMessage("تم حفظ النتيجة بنجاح.");
+        });
+
+        function createCell(text) {
+            const td = document.createElement("td");
+            td.textContent = text;
+            return td;
+        }
+
+        function renderResults() {
+            const query = searchResults.value.trim().toLowerCase();
+
+            const filtered = results.filter(function (item) {
+                const text = [
+                    item.name,
+                    item.seatNumber,
+                    item.school,
+                    item.stage
+                ].join(" ").toLowerCase();
+
+                return text.includes(query);
+            });
+
+            resultsTableBody.replaceChildren();
+            emptyMessage.hidden = filtered.length > 0;
+
+            filtered.forEach(function (item) {
+                const row = document.createElement("tr");
+
+                row.appendChild(createCell(item.name));
+                row.appendChild(createCell(item.seatNumber));
+                row.appendChild(createCell(item.school));
+                row.appendChild(createCell(item.stage));
+                row.appendChild(createCell(item.total));
+
+                row.appendChild(
+                    createCell(
+                        item.status === "published" ? "منشورة" : "غير منشورة"
+                    )
+                );
+
+                const actionsCell = document.createElement("td");
+                const actions = document.createElement("div");
+                actions.className = "table-actions";
+
+                const editButton = document.createElement("button");
+                editButton.type = "button";
+                editButton.className = "edit-btn";
+                editButton.textContent = "تعديل";
+
+                editButton.addEventListener("click", function () {
+                    editResult(item.id);
+                });
+
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.className = "delete-btn";
+                deleteButton.textContent = "حذف";
+
+                deleteButton.addEventListener("click", function () {
+                    deleteResult(item.id);
+                });
+
+                actions.append(editButton, deleteButton);
+                actionsCell.appendChild(actions);
+                row.appendChild(actionsCell);
+
+                resultsTableBody.appendChild(row);
+            });
+        }
+
+        function editResult(id) {
+            const item = results.find(function (result) {
+                return result.id === id;
+            });
+
+            if (!item) return;
+
+            editingId = id;
+
+            schoolSelect.value = item.school;
+            stageSelect.value = item.stage;
+            studentName.value = item.name;
+            seatNumber.value = item.seatNumber;
+            studentCode.value = item.studentCode || "";
+            publishStatus.value = item.status || "hidden";
+
+            subjectFields.forEach(function (field) {
+                document.getElementById(field).value =
+                    item.grades && item.grades[field] !== undefined
+                        ? item.grades[field]
+                        : 0;
+            });
+
+            calculateTotal();
+
+            formTitle.textContent = "تعديل نتيجة الطالب";
+            saveBtn.textContent = "حفظ التعديلات";
+            showMessage("أنت تعدل نتيجة مسجلة.");
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+
+        function deleteResult(id) {
+            const confirmed = confirm(
+                "هل أنت متأكد من حذف هذه النتيجة؟"
+            );
+
+            if (!confirmed) return;
+
+            results = results.filter(function (item) {
+                return item.id !== id;
+            });
+
+            saveResults();
+
+            if (editingId === id) {
+                resetForm();
+            }
+
+            renderResults();
+        }
+
+        document.getElementById("resetBtn").addEventListener("click", resetForm);
+        searchResults.addEventListener("input", renderResults);
+
+        loadSchools();
+        calculateTotal();
+        renderResults();
+    </script>
+
+</body>
+</html>

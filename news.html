@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>الأخبار | إدارة السنبلاوين التعليمية</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .news-category-card {
+            cursor: pointer;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: 0.25s ease;
+        }
+
+        .news-category-card:hover,
+        .news-category-card:focus-visible {
+            border-color: #166534;
+            transform: translateY(-4px);
+            outline: none;
+        }
+
+        .news-category-card.active {
+            border-color: #166534;
+            background-color: #f0fdf4;
+        }
+
+        .news-category-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .news-category-button {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 9px 16px;
+            background: #166534;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font: inherit;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .news-category-button:hover {
+            background: #14532d;
+        }
+
+        .news-results-section {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .news-results-heading {
+            margin-bottom: 20px;
+        }
+
+        .news-public-search {
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            padding: 12px;
+            margin-bottom: 24px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font: inherit;
+        }
+
+        .news-public-card {
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .news-public-image {
+            display: block;
+            width: 100%;
+            max-height: 420px;
+            object-fit: contain;
+            background: #f3f4f6;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .news-public-date {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 12px;
+        }
+
+        .news-public-summary {
+            font-weight: bold;
+            line-height: 1.8;
+        }
+
+        .news-public-content {
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            line-height: 1.9;
+        }
+
+        .news-public-category {
+            display: inline-block;
+            padding: 5px 10px;
+            margin-bottom: 10px;
+            background: #e5f5e9;
+            color: #14532d;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .news-public-empty {
+            padding: 25px;
+            background: #f9fafb;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .news-public-status {
+            color: #8b1e1e;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 600px) {
+            .news-results-section {
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-content">
+
+            <div class="logo">
+                <div class="logo-icon">🎓</div>
+
+                <div>
+                    <h1>إدارة السنبلاوين التعليمية</h1>
+                    <p>محافظة الدقهلية</p>
+                </div>
+            </div>
+
+            <nav>
+                <a href="index.html">الرئيسية</a>
+                <a href="about.html">عن الإدارة</a>
+                <a href="news.html">الأخبار</a>
+                <a href="gallery.html">معرض الصور</a>
+                <a href="videos.html">الفيديوهات</a>
+                <a href="schools.html">المدارس</a>
+                <a href="services.html">الخدمات</a>
+                <a href="contact.html">تواصل معنا</a>
+                <a href="results.html">🎓 نتائج الطلاب</a>
+            </nav>
+
+        </div>
+    </header>
+
+    <main>
+
+        <section class="page-banner">
+            <h2>أخبار الإدارة التعليمية</h2>
+            <p>تابع أحدث الأخبار والأنشطة التعليمية والإعلانات المهمة</p>
+        </section>
+
+        <section class="section">
+
+            <h2>تصفح أقسام الأخبار</h2>
+
+            <div class="cards">
+
+                <article
+                    class="card news-category-card"
+                    data-category="أخبار الإدارة"
+                >
+                    <div class="news-category-icon">📰</div>
+                    <h3>أخبار الإدارة</h3>
+                    <p>تابع أخبار إدارة السنبلاوين التعليمية.</p>
+
+                    <button
+                        type="button"
+                        class="news-category-button"
+                    >
+                        عرض الأخبار
+                    </button>
+                </article>
+
+                <article
+                    class="card news-category-card"
+                    data-category="الأنشطة التعليمية"
+                >
+                    <div class="news-category-icon">🎓</div>
+                    <h3>الأنشطة التعليمية</h3>
+                    <p>أخبار الأنشطة والفعاليات المدرسية.</p>
+
+                    <button
+                        type="button"
+                        class="news-category-button"
+                    >
+                        عرض الأنشطة
+                    </button>
+                </article>
+
+                <article
+                    class="card news-category-card"
+                    data-category="الإعلانات"
+                >
+                    <div class="news-category-icon">📢</div>
+                    <h3>الإعلانات المهمة</h3>
+                    <p>الإعلانات والتعليمات المهمة المنشورة.</p>
+
+                    <button
+                        type="button"
+                        class="news-category-button"
+                    >
+                        عرض الإعلانات
+                    </button>
+                </article>
+
+            </div>
+
+        </section>
+
+        <section
+            class="news-results-section"
+            id="newsResultsSection"
+            aria-labelledby="newsResultsHeading"
+        >
+
+            <h2
+                class="news-results-heading"
+                id="newsResultsHeading"
+            >
+                أحدث الأخبار
+            </h2>
+
+            <input
+                type="search"
+                id="publicNewsSearch"
+                class="news-public-search"
+                placeholder="ابحث في الأخبار المعروضة..."
+                aria-label="البحث في الأخبار"
+            >
+
+            <p
+                id="publicNewsStatus"
+                class="news-public-status"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+            <div id="publicNewsList" class="cards"></div>
+
+            <div
+                id="publicNewsEmpty"
+                class="news-public-empty"
+                hidden
+            >
+                لا توجد أخبار في هذا القسم حاليًا.
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>إدارة السنبلاوين التعليمية - محافظة الدقهلية</p>
+        <p>تطوير الموقع: محمد رضا السيد عباس</p>
+    </footer>
+
+    <script>
+        const NEWS_STORAGE_KEY = "sanbalawin_news";
+
+        const categoryCards = document.querySelectorAll(
+            ".news-category-card"
+        );
+
+        const newsResultsHeading =
+            document.getElementById("newsResultsHeading");
+
+        const publicNewsSearch =
+            document.getElementById("publicNewsSearch");
+
+        const publicNewsList =
+            document.getElementById("publicNewsList");
+
+        const publicNewsEmpty =
+            document.getElementById("publicNewsEmpty");
+
+        const publicNewsStatus =
+            document.getElementById("publicNewsStatus");
+
+        let allNews = [];
+        let selectedCategory = null;
+
+        function loadPublicNews() {
+            try {
+                const savedNews = localStorage.getItem(NEWS_STORAGE_KEY);
+
+                if (savedNews === null) {
+                    allNews = [];
+                    return;
+                }
+
+                const parsedNews = JSON.parse(savedNews);
+
+                if (!Array.isArray(parsedNews)) {
+                    throw new Error("بيانات الأخبار غير صحيحة.");
+                }
+
+                allNews = parsedNews.map(function (item) {
+                    return {
+                        ...item,
+                        title: String(
+                            item.title ?? item.headline ?? ""
+                        ),
+                        category: String(
+                            item.category ?? "أخبار الإدارة"
+                        ),
+                        date: String(item.date ?? ""),
+                        summary: String(item.summary ?? ""),
+                        content: String(
+                            item.content ?? item.body ?? ""
+                        ),
+                        image: String(item.image ?? "")
+                    };
+                });
+
+            } catch (error) {
+                console.error("تعذر تحميل الأخبار:", error);
+
+                allNews = [];
+
+                publicNewsStatus.textContent =
+                    "تعذر قراءة الأخبار المحفوظة في المتصفح.";
+            }
+        }
+
+        function createNewsElement(tag, text, className) {
+            const element = document.createElement(tag);
+
+            element.textContent = text;
+
+            if (className) {
+                element.className = className;
+            }
+
+            return element;
+        }
+
+        function getFilteredNews() {
+            const searchText = publicNewsSearch.value
+                .trim()
+                .toLocaleLowerCase("ar");
+
+            return allNews.filter(function (item) {
+                const categoryMatches =
+                    selectedCategory === null ||
+                    item.category === selectedCategory;
+
+                const searchableText = [
+                    item.title,
+                    item.category,
+                    item.summary,
+                    item.content
+                ].join(" ").toLocaleLowerCase("ar");
+
+                const searchMatches =
+                    searchableText.includes(searchText);
+
+                return categoryMatches && searchMatches;
+            });
+        }
+
+        function renderPublicNews() {
+            publicNewsList.replaceChildren();
+
+            const filteredNews = getFilteredNews();
+
+            publicNewsEmpty.hidden = filteredNews.length !== 0;
+
+            if (selectedCategory === null) {
+                newsResultsHeading.textContent = "أحدث الأخبار";
+            } else {
+                newsResultsHeading.textContent = selectedCategory;
+            }
+
+            if (filteredNews.length === 0) {
+                publicNewsEmpty.textContent =
+                    selectedCategory === null
+                        ? "لا توجد أخبار منشورة حاليًا."
+                        : "لا توجد أخبار منشورة في قسم " +
+                          selectedCategory + " حاليًا.";
+            }
+
+            filteredNews.forEach(function (item) {
+                const article = document.createElement("article");
+
+                article.className = "card news-public-card";
+
+                article.appendChild(
+                    createNewsElement(
+                        "span",
+                        item.category,
+                        "news-public-category"
+                    )
+                );
+
+                article.appendChild(
+                    createNewsElement("h3", item.title)
+                );
+
+                article.appendChild(
+                    createNewsElement(
+                        "p",
+                        "تاريخ الخبر: " + (item.date || "غير محدد"),
+                        "news-public-date"
+                    )
+                );
+
+                if (item.image) {
+                    const image = document.createElement("img");
+
+                    image.className = "news-public-image";
+                    image.alt = "صورة الخبر: " + item.title;
+                    image.loading = "lazy";
+                    image.src = item.image;
+
+                    image.addEventListener("error", function () {
+                        image.hidden = true;
+                    });
+
+                    article.appendChild(image);
+                }
+
+                if (item.summary) {
+                    article.appendChild(
+                        createNewsElement(
+                            "p",
+                            item.summary,
+                            "news-public-summary"
+                        )
+                    );
+                }
+
+                article.appendChild(
+                    createNewsElement(
+                        "p",
+                        item.content,
+                        "news-public-content"
+                    )
+                );
+
+                publicNewsList.appendChild(article);
+            });
+        }
+
+        function selectCategory(category) {
+            selectedCategory = category;
+
+            categoryCards.forEach(function (card) {
+                const isSelected =
+                    card.dataset.category === category;
+
+                card.classList.toggle("active", isSelected);
+
+                if (isSelected) {
+                    card.setAttribute("aria-pressed", "true");
+                } else {
+                    card.setAttribute("aria-pressed", "false");
+                }
+            });
+
+            publicNewsSearch.value = "";
+
+            renderPublicNews();
+
+            document.getElementById("newsResultsSection").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }
+
+        categoryCards.forEach(function (card) {
+            const category = card.dataset.category;
+
+            card.setAttribute("tabindex", "0");
+            card.setAttribute("role", "button");
+            card.setAttribute("aria-pressed", "false");
+
+            card.addEventListener("click", function () {
+                selectCategory(category);
+            });
+
+            card.addEventListener("keydown", function (event) {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    selectCategory(category);
+                }
+            });
+        });
+
+        publicNewsSearch.addEventListener(
+            "input",
+            renderPublicNews
+        );
+
+        window.addEventListener("storage", function (event) {
+            if (event.key === NEWS_STORAGE_KEY) {
+                loadPublicNews();
+                renderPublicNews();
+            }
+        });
+
+        loadPublicNews();
+        renderPublicNews();
+    </script>
+
+</body>
+
+</html>

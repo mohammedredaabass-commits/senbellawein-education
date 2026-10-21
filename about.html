@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="description"
+          content="تعرف على إدارة السنبلاوين التعليمية بمحافظة الدقهلية ورؤيتها ورسالتها وأهدافها.">
+
+    <title>عن الإدارة | إدارة السنبلاوين التعليمية</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* تنسيقات خاصة بصفحة عن الإدارة فقط */
+
+        .about-hero {
+            background: linear-gradient(135deg, #075b43, #087f5b);
+            color: white;
+            padding: 45px 25px;
+            text-align: center;
+            border-radius: 15px;
+            margin: 30px auto;
+            max-width: 1200px;
+        }
+
+        .about-hero h1 {
+            margin: 0 0 12px;
+            font-size: 32px;
+        }
+
+        .about-hero p {
+            margin: 0;
+            font-size: 17px;
+            line-height: 2;
+        }
+
+        .about-container {
+            max-width: 1200px;
+            width: 92%;
+            margin: 35px auto;
+        }
+
+        .about-card {
+            background: white;
+            padding: 25px;
+            margin-bottom: 22px;
+            border-radius: 14px;
+            border: 1px solid #e0e9e3;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .about-card h2 {
+            color: #075b43;
+            font-size: 23px;
+            margin-top: 0;
+            border-right: 4px solid #d4aa3d;
+            padding-right: 12px;
+        }
+
+        .about-card p {
+            color: #45574d;
+            line-height: 2.1;
+            font-size: 16px;
+        }
+
+        .about-card ul {
+            padding-right: 25px;
+            line-height: 2.2;
+            color: #45574d;
+        }
+
+        .about-card li {
+            margin-bottom: 8px;
+        }
+
+        .about-values {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+            margin: 25px 0;
+        }
+
+        .value-item {
+            background: #f0f7f3;
+            border: 1px solid #dcebe1;
+            padding: 22px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .value-item h3 {
+            color: #075b43;
+            margin-top: 0;
+        }
+
+        .value-item p {
+            color: #52665a;
+            line-height: 1.9;
+        }
+
+        .about-note {
+            background: #fff9e9;
+            border-right: 5px solid #d4aa3d;
+            padding: 18px;
+            border-radius: 8px;
+            color: #574b2b;
+            line-height: 2;
+        }
+
+        body.dark-mode .about-card {
+            background: #1d3025;
+            border-color: #344b3b;
+        }
+
+        body.dark-mode .about-card h2 {
+            color: #8ed5ae;
+        }
+
+        body.dark-mode .about-card p,
+        body.dark-mode .about-card ul {
+            color: #d4e1d8;
+        }
+
+        body.dark-mode .value-item {
+            background: #24392c;
+            border-color: #344b3b;
+        }
+
+        body.dark-mode .value-item h3,
+        body.dark-mode .value-item p {
+            color: #d4e1d8;
+        }
+
+        body.dark-mode .about-note {
+            background: #393321;
+            color: #f5e7b7;
+        }
+
+        @media (max-width: 700px) {
+            .about-hero {
+                margin: 20px auto;
+                padding: 30px 18px;
+            }
+
+            .about-hero h1 {
+                font-size: 25px;
+            }
+
+            .about-values {
+                grid-template-columns: 1fr;
+            }
+
+            .about-card {
+                padding: 20px 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- الشريط العلوي -->
+
+    <div class="top-bar">
+        <div class="ticker">
+            <div class="ticker-track">
+                <span>
+                    إدارة السنبلاوين التعليمية بمحافظة الدقهلية
+                    بجمهورية مصر العربية
+                </span>
+
+                <span aria-hidden="true">
+                    إدارة السنبلاوين التعليمية بمحافظة الدقهلية
+                    بجمهورية مصر العربية
+                </span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- رأس الموقع -->
+
+    <header class="site-header">
+
+        <div class="header-container">
+
+            <div class="identity">
+
+                <img
+                    src="OIP.webp"
+                    alt="شعار إدارة السنبلاوين التعليمية"
+                    class="identity-logo"
+                >
+
+                <div class="identity-text">
+
+                    <h1>إدارة السنبلاوين التعليمية</h1>
+
+                    <p>محافظة الدقهلية - جمهورية مصر العربية</p>
+
+                    <p class="slogan">
+                        بالعِلم نحقق الأحلام وبالمعرفة نبني العقول
+                    </p>
+
+                </div>
+
+            </div>
+
+            <button
+                id="theme-toggle"
+                class="theme-toggle"
+                type="button"
+                aria-label="تغيير الوضع"
+                title="تغيير الوضع"
+            >
+
+                <svg
+                    class="theme-icon moon-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <path d="M20.9 13A9 9 0 0 1 11 3.1
+                    9 9 0 1 0 20.9 13Z"></path>
+                </svg>
+
+                <svg
+                    class="theme-icon sun-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                >
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M12 2v2"></path>
+                    <path d="M12 20v2"></path>
+                    <path d="m4.93 4.93 1.42 1.42"></path>
+                    <path d="m17.65 17.65 1.42 1.42"></path>
+                    <path d="M2 12h2"></path>
+                    <path d="M20 12h2"></path>
+                    <path d="m6.35 17.65-1.42 1.42"></path>
+                    <path d="m19.07 4.93-1.42 1.42"></path>
+                </svg>
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- القائمة الرئيسية -->
+
+    <nav class="main-nav">
+
+        <ul>
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="about.html">عن الإدارة</a></li>
+            <li><a href="news.html">الأخبار</a></li>
+            <li><a href="schools.html">المدارس</a></li>
+            <li><a href="gallery.html">معرض الصور</a></li>
+            <li><a href="videos.html">الفيديوهات</a></li>
+            <li><a href="services.html">الخدمات</a></li>
+            <li><a href="contact.html">تواصل معنا</a></li>
+            <li><a href="results.html">🎓 نتائج الطلاب</a></li>
+            
+        </ul>
+
+    </nav>
+
+
+    <!-- مقدمة الصفحة -->
+
+    <section class="about-hero">
+
+        <h1>عن إدارة السنبلاوين التعليمية</h1>
+
+        <p>
+            التعليم أساس بناء الإنسان، والمعرفة طريق التقدم.
+            نسعى إلى دعم العملية التعليمية والارتقاء بها
+            من خلال التعاون والعمل المستمر.
+        </p>
+
+    </section>
+
+
+    <!-- محتوى الصفحة -->
+
+    <main class="about-container">
+
+        <section class="about-card">
+
+            <h2>نبذة عن الإدارة</h2>
+
+            <p>
+                إدارة السنبلاوين التعليمية إحدى الإدارات التعليمية
+                بمحافظة الدقهلية بجمهورية مصر العربية.
+                يهتم هذا الموقع بتقديم المعلومات والأخبار والخدمات
+                المتعلقة بالعملية التعليمية، وتسهيل وصول الطلاب
+                وأولياء الأمور والمعلمين إلى المعلومات المنشورة.
+            </p>
+
+        </section>
+
+
+        <section class="about-card">
+
+            <h2>رؤيتنا</h2>
+
+            <p>
+                المساهمة في بناء بيئة تعليمية متطورة تشجع على
+                الإبداع والابتكار، وتساعد الطلاب على اكتساب
+                المعرفة والمهارات اللازمة للمستقبل.
+            </p>
+
+        </section>
+
+
+        <section class="about-card">
+
+            <h2>رسالتنا</h2>
+
+            <p>
+                دعم التواصل بين عناصر المجتمع التعليمي،
+                وتوفير المعلومات التعليمية بصورة واضحة ومنظمة،
+                والمساهمة في نشر ثقافة التعلم والتطوير المستمر.
+            </p>
+
+        </section>
+
+
+        <section class="about-card">
+
+            <h2>أهدافنا</h2>
+
+            <ul>
+                <li>تيسير الوصول إلى الأخبار والمعلومات التعليمية.</li>
+                <li>دعم التواصل بين المدارس وأولياء الأمور والطلاب.</li>
+                <li>التعريف بالأنشطة والفعاليات التعليمية.</li>
+                <li>المساهمة في نشر المعرفة والوعي التعليمي.</li>
+                <li>الاستفادة من التكنولوجيا في تقديم الخدمات والمعلومات.</li>
+            </ul>
+
+        </section>
+
+
+        <section class="about-card">
+
+            <h2>قيمنا</h2>
+
+            <div class="about-values">
+
+                <div class="value-item">
+                    <h3>العلم</h3>
+                    <p>
+                        المعرفة أساس التقدم وبناء المستقبل.
+                    </p>
+                </div>
+
+                <div class="value-item">
+                    <h3>التعاون</h3>
+                    <p>
+                        العمل المشترك يساعد على تحقيق الأهداف.
+                    </p>
+                </div>
+
+                <div class="value-item">
+                    <h3>التطوير</h3>
+                    <p>
+                        نسعى إلى الاستفادة من الوسائل التقنية الحديثة.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+       
+
+    </main>
+
+
+    <!-- تذييل الموقع -->
+
+    <footer class="site-footer">
+
+        <div class="footer-container">
+
+            <div>
+                <h3>إدارة السنبلاوين التعليمية</h3>
+
+                <p>
+                    محافظة الدقهلية - جمهورية مصر العربية
+                </p>
+            </div>
+
+            <div>
+                <h3>روابط مهمة</h3>
+
+                <p><a href="index.html">الصفحة الرئيسية</a></p>
+                <p><a href="news.html">أخبار الإدارة</a></p>
+                <p><a href="schools.html">دليل المدارس</a></p>
+                <p><a href="contact.html">تواصل معنا</a></p>
+            </div>
+
+            <div>
+                <h3>مطور الموقع</h3>
+
+                <p>تصميم وتطوير الموقع</p>
+
+                <p class="developer-name">
+                    محمد رضا السيد عباس
+                </p>
+
+                <p>
+                    <a href="tel:+201065416800" dir="ltr">
+                        01065416800
+                    </a>
+                </p>
+
+                <p>
+                    <a
+                        href="https://wa.me/201065416800"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        التواصل عبر واتساب
+                    </a>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+
+            <p>
+                جميع الحقوق المتعلقة بالمحتوى الرسمي والعلامات
+                والشعارات محفوظة لأصحابها.
+            </p>
+
+            <p>
+                تصميم وتطوير الموقع: محمد رضا السيد عباس
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script src="main.js"></script>
+
+</body>
+</html>

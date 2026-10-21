@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المدارس | إدارة السنبلاوين التعليمية</title>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .schools-section {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        #schoolSearch {
+            display: block;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            padding: 12px;
+            margin: 12px 0 25px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font: inherit;
+        }
+
+        .schools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .school-card {
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            overflow-wrap: anywhere;
+        }
+
+        .school-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+        }
+
+        .school-card h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #14532d;
+        }
+
+        .school-card p {
+            line-height: 1.8;
+            margin: 8px 0;
+        }
+
+        .school-card-link {
+            display: block;
+            color: inherit;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .school-card-link:focus-visible {
+            outline: 3px solid #166534;
+            outline-offset: 4px;
+        }
+
+        .school-card.has-website {
+            border-top: 4px solid #166534;
+        }
+
+        .school-website-hint {
+            display: inline-block;
+            margin-top: 10px;
+            color: #166534;
+            font-weight: bold;
+        }
+
+        .school-no-website {
+            display: inline-block;
+            margin-top: 10px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        #noSchoolsMessage {
+            padding: 20px;
+            text-align: center;
+            background: #f9fafb;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .schools-section {
+                padding: 12px;
+            }
+
+            .schools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="header-content">
+            <img
+                src="OIP.webp"
+                alt="شعار إدارة السنبلاوين التعليمية"
+                class="site-logo"
+                onerror="this.style.display='none'"
+            >
+
+            <div class="header-text">
+                <h1>إدارة السنبلاوين التعليمية</h1>
+                <p>محافظة الدقهلية - جمهورية مصر العربية</p>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="index.html">الرئيسية</a></li>
+            <li><a href="about.html">عن الإدارة</a></li>
+            <li><a href="news.html">الأخبار</a></li>
+            <li>
+                <a href="schools.html" aria-current="page">المدارس</a>
+            </li>
+            <li><a href="gallery.html">معرض الصور</a></li>
+            <li><a href="videos.html">الفيديوهات</a></li>
+            <li><a href="services.html">الخدمات</a></li>
+            <li><a href="contact.html">تواصل معنا</a></li>
+            <a href="results.html">🎓 نتائج الطلاب</a>
+        </ul>
+    </nav>
+
+    <main class="page-content">
+
+        <section class="page-hero">
+            <h2>المدارس التابعة للإدارة</h2>
+            <p>
+                صفحة مخصصة للتعريف بالمدارس وعرض بياناتها التعليمية.
+            </p>
+        </section>
+
+        <section class="schools-section">
+
+            <h2>ابحث عن مدرسة</h2>
+
+            <label for="schoolSearch">اكتب اسم المدرسة:</label>
+
+            <input
+                type="search"
+                id="schoolSearch"
+                placeholder="ابحث باسم المدرسة أو المرحلة أو العنوان..."
+                autocomplete="off"
+            >
+
+            <div
+                id="schoolsList"
+                class="schools-grid"
+                aria-live="polite"
+            ></div>
+
+            <p id="noSchoolsMessage" hidden>
+                لا توجد مدارس مسجلة أو لا توجد نتائج مطابقة للبحث.
+            </p>
+
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+
+        <div class="footer-container">
+
+            <div>
+                <h3>إدارة السنبلاوين التعليمية</h3>
+                <p>محافظة الدقهلية - جمهورية مصر العربية</p>
+            </div>
+
+            <div>
+                <h3>روابط مهمة</h3>
+                <p><a href="index.html">الرئيسية</a></p>
+                <p><a href="news.html">الأخبار</a></p>
+                <p><a href="contact.html">تواصل معنا</a></p>
+            </div>
+
+            <div>
+                <h3>مطور الموقع</h3>
+                <p>محمد رضا السيد عباس</p>
+
+                <p>
+                    <a href="tel:+201065416800" dir="ltr">
+                        01065416800
+                    </a>
+                </p>
+
+                <p>
+                    <a
+                        href="https://wa.me/201065416800"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        التواصل عبر واتساب
+                    </a>
+                </p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>تصميم وتطوير الموقع: محمد رضا السيد عباس</p>
+        </div>
+
+    </footer>
+
+    <script src="main.js"></script>
+
+    <script>
+    (function () {
+        "use strict";
+
+        const STORAGE_KEY = "sanbalawin_schools";
+
+        const schoolSearch = document.getElementById("schoolSearch");
+        const schoolsList = document.getElementById("schoolsList");
+        const noSchoolsMessage = document.getElementById("noSchoolsMessage");
+
+        function loadSchools() {
+            try {
+                const savedData = localStorage.getItem(STORAGE_KEY);
+
+                if (!savedData) {
+                    return [];
+                }
+
+                const data = JSON.parse(savedData);
+
+                if (!Array.isArray(data)) {
+                    return [];
+                }
+
+                return data;
+            } catch (error) {
+                console.error("تعذر قراءة بيانات المدارس:", error);
+                noSchoolsMessage.textContent =
+                    "تعذر تحميل بيانات المدارس. حاول تحديث الصفحة.";
+                noSchoolsMessage.hidden = false;
+
+                return [];
+            }
+        }
+
+        function normalizeText(value) {
+            return String(value || "").trim().toLocaleLowerCase("ar");
+        }
+
+        function getSchoolWebsite(school) {
+            const website = String(
+                school.website || school.url || school.link || ""
+            ).trim();
+
+            if (!website) {
+                return "";
+            }
+
+            try {
+                const parsedUrl = new URL(website);
+
+                if (
+                    parsedUrl.protocol === "https:" ||
+                    parsedUrl.protocol === "http:"
+                ) {
+                    return parsedUrl.href;
+                }
+            } catch (error) {
+                console.warn(
+                    "رابط غير صالح للمدرسة:",
+                    school.name || school.schoolName
+                );
+            }
+
+            return "";
+        }
+
+        function createInfoParagraph(label, value, fallback) {
+            const paragraph = document.createElement("p");
+            paragraph.textContent =
+                label + (value ? String(value) : fallback);
+
+            return paragraph;
+        }
+
+        function renderSchools() {
+            const schools = loadSchools();
+            const searchText = normalizeText(schoolSearch.value);
+
+            const filteredSchools = schools.filter(function (school) {
+                const name = normalizeText(
+                    school.name || school.schoolName
+                );
+
+                const stage = normalizeText(
+                    school.stage || school.type
+                );
+
+                const address = normalizeText(school.address);
+                const phone = normalizeText(school.phone);
+                const principal = normalizeText(school.principal);
+
+                const searchableText = [
+                    name,
+                    stage,
+                    address,
+                    phone,
+                    principal
+                ].join(" ");
+
+                return searchableText.includes(searchText);
+            });
+
+            schoolsList.replaceChildren();
+
+            filteredSchools.forEach(function (school) {
+                const card = document.createElement("article");
+                card.className = "school-card";
+
+                const schoolName =
+                    school.name || school.schoolName || "مدرسة بدون اسم";
+
+                const schoolStage =
+                    school.stage || school.type || "غير محددة";
+
+                const website = getSchoolWebsite(school);
+
+                const title = document.createElement("h3");
+                title.textContent = schoolName;
+
+                const stageParagraph = createInfoParagraph(
+                    "المرحلة التعليمية: ",
+                    schoolStage,
+                    "غير محددة"
+                );
+
+                const addressParagraph = createInfoParagraph(
+                    "العنوان: ",
+                    school.address,
+                    "غير مسجل"
+                );
+
+                const phoneParagraph = createInfoParagraph(
+                    "رقم التواصل: ",
+                    school.phone,
+                    "غير مسجل"
+                );
+
+                if (website) {
+                    card.classList.add("has-website");
+
+                    const link = document.createElement("a");
+                    link.className = "school-card-link";
+                    link.href = website;
+                    link.target = "_blank";
+                    link.rel = "noopener noreferrer";
+                    link.setAttribute(
+                        "aria-label",
+                        "فتح موقع " + schoolName + " في صفحة جديدة"
+                    );
+
+                    const hint = document.createElement("span");
+                    hint.className = "school-website-hint";
+                    hint.textContent = "🌐 اضغط هنا لزيارة موقع المدرسة";
+
+                    link.append(
+                        title,
+                        stageParagraph,
+                        addressParagraph,
+                        phoneParagraph,
+                        hint
+                    );
+
+                    card.appendChild(link);
+                } else {
+                    const hint = document.createElement("span");
+                    hint.className = "school-no-website";
+                    hint.textContent = "لا يوجد رابط موقع مسجل لهذه المدرسة.";
+
+                    card.append(
+                        title,
+                        stageParagraph,
+                        addressParagraph,
+                        phoneParagraph,
+                        hint
+                    );
+                }
+
+                schoolsList.appendChild(card);
+            });
+
+            if (filteredSchools.length > 0) {
+                noSchoolsMessage.hidden = true;
+            } else {
+                noSchoolsMessage.hidden = false;
+
+                noSchoolsMessage.textContent = schools.length === 0
+                    ? "لم تتم إضافة مدارس حتى الآن."
+                    : "لا توجد مدارس تطابق عبارة البحث.";
+            }
+        }
+
+        schoolSearch.addEventListener("input", renderSchools);
+
+        renderSchools();
+    })();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الصور | إدارة السنبلاوين التعليمية</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #123b63;
+            color: white;
+            padding: 22px 15px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 10px;
+            font-size: 25px;
+        }
+
+        header p {
+            margin: 0;
+            color: #dbeafe;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 25px auto;
+        }
+
+        .panel {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #123b63;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 7px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-family: inherit;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: 2px solid #93c5fd;
+            border-color: #2563eb;
+        }
+
+        button,
+        .back-link {
+            display: inline-block;
+            border: none;
+            border-radius: 7px;
+            padding: 11px 18px;
+            margin-top: 15px;
+            font-family: inherit;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .save-btn {
+            background: #166534;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #b91c1c;
+            color: white;
+        }
+
+        .back-link {
+            background: #e2e8f0;
+            color: #123b63;
+        }
+
+        button:hover,
+        .back-link:hover {
+            opacity: 0.85;
+        }
+
+        .preview-box {
+            margin-top: 15px;
+            display: none;
+        }
+
+        .preview-box img {
+            display: block;
+            max-width: 100%;
+            max-height: 280px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .hint {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .image-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            display: block;
+            background: #e2e8f0;
+        }
+
+        .image-info {
+            padding: 13px;
+        }
+
+        .image-info h3 {
+            margin: 0 0 8px;
+            font-size: 17px;
+        }
+
+        .image-info p {
+            margin: 0;
+            color: #64748b;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .image-info button {
+            width: 100%;
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #64748b;
+            padding: 25px 10px;
+        }
+
+        #statusMessage {
+            margin-top: 15px;
+            line-height: 1.8;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 21px;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            .panel {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>إدارة الصور</h1>
+        <p>إدارة السنبلاوين التعليمية - محافظة الدقهلية</p>
+    </header>
+
+    <main class="container">
+
+        <section class="panel">
+            <h2>إضافة صورة جديدة</h2>
+
+            <form id="imageForm">
+                <label for="imageTitle">عنوان الصورة</label>
+                <input
+                    type="text"
+                    id="imageTitle"
+                    placeholder="مثال: طابور الصباح"
+                    maxlength="100"
+                    required
+                >
+
+                <label for="imageDescription">وصف الصورة</label>
+                <textarea
+                    id="imageDescription"
+                    placeholder="اكتب وصفًا مختصرًا للصورة"
+                    maxlength="500"
+                ></textarea>
+
+                <label for="imageFile">اختر الصورة من جهازك</label>
+                <input
+                    type="file"
+                    id="imageFile"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    required
+                >
+
+                <p class="hint">
+                    الحد الأقصى لحجم الصورة الواحدة 1 ميجابايت.
+                    يُفضّل استخدام صور مضغوطة لتجنب امتلاء مساحة التخزين.
+                </p>
+
+                <div class="preview-box" id="previewBox">
+                    <p>معاينة الصورة:</p>
+                    <img id="imagePreview" alt="معاينة الصورة المختارة">
+                </div>
+
+                <button type="submit" class="save-btn">
+                    حفظ الصورة
+                </button>
+
+                <p id="statusMessage" role="status" aria-live="polite"></p>
+            </form>
+
+            <a href="admin.html" class="back-link">
+                الرجوع إلى لوحة التحكم
+            </a>
+        </section>
+
+        <section class="panel">
+            <h2>الصور المضافة</h2>
+            <p id="imageCount">عدد الصور: 0</p>
+
+            <div id="galleryGrid" class="gallery-grid"></div>
+
+            <p id="emptyMessage" class="empty-message">
+                لا توجد صور مضافة حتى الآن.
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>تطوير الموقع: محمد رضا السيد عباس</p>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = "sanbalawin_gallery";
+        const MAX_IMAGE_SIZE = 1024 * 1024;
+
+        const imageForm = document.getElementById("imageForm");
+        const imageTitle = document.getElementById("imageTitle");
+        const imageDescription = document.getElementById("imageDescription");
+        const imageFile = document.getElementById("imageFile");
+        const imagePreview = document.getElementById("imagePreview");
+        const previewBox = document.getElementById("previewBox");
+        const galleryGrid = document.getElementById("galleryGrid");
+        const imageCount = document.getElementById("imageCount");
+        const emptyMessage = document.getElementById("emptyMessage");
+        const statusMessage = document.getElementById("statusMessage");
+
+        let selectedImageData = "";
+
+        function getImages() {
+            try {
+                const storedData = localStorage.getItem(STORAGE_KEY);
+                const images = storedData ? JSON.parse(storedData) : [];
+                return Array.isArray(images) ? images : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function showStatus(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.style.color = isError ? "#b91c1c" : "#166534";
+        }
+
+        imageFile.addEventListener("change", function () {
+            const file = imageFile.files[0];
+
+            selectedImageData = "";
+            previewBox.style.display = "none";
+            imagePreview.removeAttribute("src");
+
+            if (!file) {
+                return;
+            }
+
+            if (!file.type.startsWith("image/")) {
+                showStatus("من فضلك اختر ملف صورة صالحًا.", true);
+                imageFile.value = "";
+                return;
+            }
+
+            if (file.size > MAX_IMAGE_SIZE) {
+                showStatus("حجم الصورة أكبر من 1 ميجابايت. اختر صورة أصغر.", true);
+                imageFile.value = "";
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function () {
+                selectedImageData = reader.result;
+                imagePreview.src = selectedImageData;
+                previewBox.style.display = "block";
+                showStatus("تم اختيار الصورة بنجاح.");
+            };
+
+            reader.onerror = function () {
+                showStatus("تعذرت قراءة الصورة. حاول اختيارها مرة أخرى.", true);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        imageForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const title = imageTitle.value.trim();
+            const description = imageDescription.value.trim();
+
+            if (!title) {
+                showStatus("اكتب عنوان الصورة أولًا.", true);
+                return;
+            }
+
+            if (!selectedImageData) {
+                showStatus("اختر صورة صالحة من جهازك أولًا.", true);
+                return;
+            }
+
+            const images = getImages();
+
+            const newImage = {
+                id: Date.now().toString() + Math.random().toString(16).slice(2),
+                title: title,
+                description: description,
+                image: selectedImageData,
+                createdAt: new Date().toISOString()
+            };
+
+            images.unshift(newImage);
+
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(images));
+            } catch (error) {
+                showStatus(
+                    "تعذر حفظ الصورة؛ مساحة التخزين قد تكون ممتلئة. احذف بعض الصور أو استخدم صورة أصغر.",
+                    true
+                );
+                return;
+            }
+
+            imageForm.reset();
+            selectedImageData = "";
+            previewBox.style.display = "none";
+            imagePreview.removeAttribute("src");
+
+            showStatus("تم حفظ الصورة بنجاح.");
+            renderImages();
+        });
+
+        function renderImages() {
+            const images = getImages();
+
+            galleryGrid.replaceChildren();
+            imageCount.textContent = "عدد الصور: " + images.length;
+            emptyMessage.style.display = images.length ? "none" : "block";
+
+            images.forEach(function (item) {
+                const card = document.createElement("article");
+                card.className = "image-card";
+
+                const image = document.createElement("img");
+                image.src = item.image;
+                image.alt = item.title || "صورة من المعرض";
+                image.loading = "lazy";
+
+                const info = document.createElement("div");
+                info.className = "image-info";
+
+                const title = document.createElement("h3");
+                title.textContent = item.title || "بدون عنوان";
+
+                const description = document.createElement("p");
+                description.textContent = item.description || "لا يوجد وصف للصورة.";
+
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.className = "delete-btn";
+                deleteButton.textContent = "حذف الصورة";
+
+                deleteButton.addEventListener("click", function () {
+                    const confirmed = confirm("هل أنت متأكد من حذف هذه الصورة؟");
+
+                    if (!confirmed) {
+                        return;
+                    }
+
+                    const updatedImages = getImages().filter(function (savedImage) {
+                        return savedImage.id !== item.id;
+                    });
+
+                    try {
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedImages));
+                        renderImages();
+                        showStatus("تم حذف الصورة.");
+                    } catch (error) {
+                        showStatus("تعذر تحديث قائمة الصور.", true);
+                    }
+                });
+
+                info.append(title, description, deleteButton);
+                card.append(image, info);
+                galleryGrid.appendChild(card);
+            });
+        }
+
+        renderImages();
+    </script>
+
+</body>
+</html>

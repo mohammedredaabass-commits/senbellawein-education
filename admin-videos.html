@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>إدارة الفيديوهات | إدارة السنبلاوين التعليمية</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #123b63;
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+        }
+
+        header p {
+            margin: 0;
+            color: #dbeafe;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 25px auto;
+        }
+
+        .panel {
+            background: white;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 22px;
+            box-shadow: 0 3px 12px #0000000d;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #123b63;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 7px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea,
+        input[type="file"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 7px;
+            font-family: inherit;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 85px;
+            resize: vertical;
+        }
+
+        button,
+        .back-link {
+            display: inline-block;
+            border: none;
+            border-radius: 7px;
+            padding: 11px 17px;
+            margin-top: 12px;
+            font-family: inherit;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .save-btn {
+            background: #166534;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #b91c1c;
+            color: white;
+        }
+
+        .back-link {
+            background: #e2e8f0;
+            color: #123b63;
+        }
+
+        button:hover,
+        .back-link:hover {
+            opacity: 0.86;
+        }
+
+        .hint {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.9;
+        }
+
+        .preview {
+            display: none;
+            margin-top: 18px;
+        }
+
+        .preview video {
+            display: block;
+            width: 100%;
+            max-height: 400px;
+            background: #000;
+            border-radius: 10px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+            gap: 18px;
+        }
+
+        .video-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .video-card video {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            background: #000;
+        }
+
+        .video-info {
+            padding: 15px;
+        }
+
+        .video-info h3 {
+            margin: 0 0 8px;
+            color: #123b63;
+            overflow-wrap: anywhere;
+        }
+
+        .video-info p {
+            color: #64748b;
+            overflow-wrap: anywhere;
+        }
+
+        .video-info .delete-btn {
+            width: 100%;
+        }
+
+        .empty-message {
+            color: #64748b;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #statusMessage {
+            font-weight: bold;
+            line-height: 1.9;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #64748b;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 95%;
+            }
+
+            .panel {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 22px;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>إدارة الفيديوهات</h1>
+        <p>إدارة السنبلاوين التعليمية - محافظة الدقهلية</p>
+    </header>
+
+    <main class="container">
+
+        <section class="panel">
+            <h2>إضافة فيديو من الجهاز</h2>
+
+            <form id="videoForm">
+
+                <label for="videoTitle">عنوان الفيديو</label>
+                <input
+                    type="text"
+                    id="videoTitle"
+                    maxlength="150"
+                    placeholder="مثال: احتفالية المدرسة"
+                    required
+                >
+
+                <label for="videoDescription">وصف الفيديو</label>
+                <textarea
+                    id="videoDescription"
+                    maxlength="600"
+                    placeholder="اكتب وصفًا مختصرًا للفيديو"
+                ></textarea>
+
+                <label for="videoFile">اختيار الفيديو من جهازك</label>
+                <input
+                    type="file"
+                    id="videoFile"
+                    accept="video/mp4,video/webm,video/ogg,video/quicktime"
+                    required
+                >
+
+                <p class="hint">
+                    اختر ملف فيديو بصيغة MP4 أو WebM أو OGG.
+                    <br>
+                    ملاحظة: اختيار الفيديو هنا لا يعني رفعه إلى الإنترنت.
+                    ملف الفيديو يظل على جهازك.
+                </p>
+
+                <div class="preview" id="previewBox">
+                    <h3>معاينة الفيديو المحدد</h3>
+                    <video id="videoPreview" controls playsinline></video>
+                </div>
+
+                <button type="submit" class="save-btn">
+                    إضافة الفيديو إلى القائمة
+                </button>
+
+                <p id="statusMessage" role="status" aria-live="polite"></p>
+
+            </form>
+
+            <a href="admin.html" class="back-link">
+                الرجوع إلى لوحة التحكم
+            </a>
+        </section>
+
+        <section class="panel">
+            <h2>الفيديوهات المضافة</h2>
+
+            <p id="videoCount">عدد الفيديوهات: 0</p>
+
+            <div id="videoGrid" class="video-grid"></div>
+
+            <p id="emptyMessage" class="empty-message">
+                لم تتم إضافة فيديوهات حتى الآن.
+            </p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>تطوير الموقع: محمد رضا السيد عباس</p>
+    </footer>
+
+    <script>
+        const videoForm = document.getElementById("videoForm");
+        const videoTitle = document.getElementById("videoTitle");
+        const videoDescription = document.getElementById("videoDescription");
+        const videoFile = document.getElementById("videoFile");
+        const videoPreview = document.getElementById("videoPreview");
+        const previewBox = document.getElementById("previewBox");
+        const videoGrid = document.getElementById("videoGrid");
+        const videoCount = document.getElementById("videoCount");
+        const emptyMessage = document.getElementById("emptyMessage");
+        const statusMessage = document.getElementById("statusMessage");
+
+        // روابط المعاينة المؤقتة للفيديوهات المختارة.
+        let selectedVideoUrl = "";
+        let videos = [];
+
+        function showStatus(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.style.color = isError ? "#b91c1c" : "#166534";
+        }
+
+        function releaseSelectedVideo() {
+            if (selectedVideoUrl) {
+                URL.revokeObjectURL(selectedVideoUrl);
+                selectedVideoUrl = "";
+            }
+        }
+
+        videoFile.addEventListener("change", function () {
+            const file = videoFile.files[0];
+
+            releaseSelectedVideo();
+
+            videoPreview.pause();
+            videoPreview.removeAttribute("src");
+            videoPreview.load();
+
+            previewBox.style.display = "none";
+
+            if (!file) {
+                return;
+            }
+
+            if (!file.type.startsWith("video/")) {
+                videoFile.value = "";
+                showStatus("من فضلك اختر ملف فيديو صالحًا.", true);
+                return;
+            }
+
+            selectedVideoUrl = URL.createObjectURL(file);
+
+            videoPreview.src = selectedVideoUrl;
+            previewBox.style.display = "block";
+
+            showStatus("تم اختيار الفيديو. يمكنك معاينته قبل إضافته.");
+        });
+
+        videoForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const file = videoFile.files[0];
+            const title = videoTitle.value.trim();
+            const description = videoDescription.value.trim();
+
+            if (!file || !selectedVideoUrl) {
+                showStatus("اختر فيديو من جهازك أولًا.", true);
+                return;
+            }
+
+            if (!file.type.startsWith("video/")) {
+                showStatus("الملف المحدد ليس فيديو صالحًا.", true);
+                return;
+            }
+
+            /*
+              File Object وObject URL صالحان لهذه الجلسة فقط.
+              لا نحفظهما في localStorage لأن ذلك لا يرفع الفيديو
+              ولا يجعل الملف متاحًا تلقائيًا بعد إعادة فتح الصفحة.
+            */
+
+            videos.push({
+                id: Date.now().toString() + Math.random().toString(16).slice(2),
+                title: title,
+                description: description,
+                file: file,
+                url: selectedVideoUrl
+            });
+
+            // نقل ملكية الرابط إلى عنصر الفيديو في القائمة.
+            selectedVideoUrl = "";
+
+            videoForm.reset();
+            videoPreview.removeAttribute("src");
+            videoPreview.load();
+            previewBox.style.display = "none";
+
+            showStatus("تمت إضافة الفيديو إلى القائمة الحالية.");
+            renderVideos();
+        });
+
+        function renderVideos() {
+            videoGrid.replaceChildren();
+
+            videoCount.textContent = "عدد الفيديوهات: " + videos.length;
+            emptyMessage.style.display = videos.length ? "none" : "block";
+
+            videos.forEach(function (video) {
+                const card = document.createElement("article");
+                card.className = "video-card";
+
+                const player = document.createElement("video");
+                player.src = video.url;
+                player.controls = true;
+                player.preload = "metadata";
+                player.playsInline = true;
+
+                const info = document.createElement("div");
+                info.className = "video-info";
+
+                const title = document.createElement("h3");
+                title.textContent = video.title;
+
+                const description = document.createElement("p");
+                description.textContent =
+                    video.description || "لا يوجد وصف لهذا الفيديو.";
+
+                const fileInfo = document.createElement("p");
+                fileInfo.textContent =
+                    "اسم الملف: " + video.file.name;
+
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.className = "delete-btn";
+                deleteButton.textContent = "حذف الفيديو";
+
+                deleteButton.addEventListener("click", function () {
+                    if (!confirm("هل تريد حذف هذا الفيديو من القائمة؟")) {
+                        return;
+                    }
+
+                    player.pause();
+                    URL.revokeObjectURL(video.url);
+
+                    videos = videos.filter(function (item) {
+                        return item.id !== video.id;
+                    });
+
+                    renderVideos();
+                    showStatus("تم حذف الفيديو من القائمة.");
+                });
+
+                info.append(title, description, fileInfo, deleteButton);
+                card.append(player, info);
+
+                videoGrid.appendChild(card);
+            });
+        }
+
+        window.addEventListener("beforeunload", function () {
+            releaseSelectedVideo();
+
+            videos.forEach(function (video) {
+                URL.revokeObjectURL(video.url);
+            });
+        });
+
+        renderVideos();
+    </script>
+
+</body>
+</html>

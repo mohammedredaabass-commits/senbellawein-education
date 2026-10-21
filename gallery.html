@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>معرض الصور | إدارة السنبلاوين التعليمية</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1e293b;
+            line-height: 1.8;
+        }
+
+        header {
+            background: #123b63;
+            color: white;
+            text-align: center;
+            padding: 30px 15px;
+        }
+
+        header h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        header p {
+            margin: 0;
+            color: #dbeafe;
+        }
+
+        nav {
+            background: white;
+            padding: 13px;
+            text-align: center;
+            box-shadow: 0 2px 8px #0000000d;
+        }
+
+        nav a {
+            display: inline-block;
+            color: #123b63;
+            text-decoration: none;
+            margin: 5px 10px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #2563eb;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .intro {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 25px;
+            text-align: center;
+            box-shadow: 0 3px 12px #0000000a;
+        }
+
+        .intro h2 {
+            margin-top: 0;
+            color: #123b63;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 22px;
+        }
+
+        .gallery-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 12px #0000000d;
+            transition: transform 0.2s;
+        }
+
+        .gallery-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .gallery-card img {
+            display: block;
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            background: #e2e8f0;
+            cursor: pointer;
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        .card-content h3 {
+            margin: 0 0 8px;
+            color: #123b63;
+            font-size: 19px;
+        }
+
+        .card-content p {
+            margin: 0;
+            color: #64748b;
+            overflow-wrap: anywhere;
+        }
+
+        .empty-message {
+            background: white;
+            text-align: center;
+            padding: 35px 15px;
+            border-radius: 12px;
+            color: #64748b;
+        }
+
+        .empty-message h3 {
+            color: #123b63;
+        }
+
+        .admin-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 18px;
+            border-radius: 7px;
+            background: #123b63;
+            color: white;
+            text-decoration: none;
+        }
+
+        footer {
+            background: #123b63;
+            color: white;
+            text-align: center;
+            padding: 22px 12px;
+            margin-top: 40px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 23px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-card img {
+                height: 230px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>معرض الصور</h1>
+        <p>إدارة السنبلاوين التعليمية بمحافظة الدقهلية</p>
+    </header>
+
+    <nav>
+        <a href="index.html">الرئيسية</a>
+        <a href="about.html">عن الإدارة</a>
+        <a href="schools.html">المدارس</a>
+        <a href="news.html">الأخبار</a>
+        <a href="gallery.html">معرض الصور</a>
+        <a href="videos.html">الفيديوهات</a>
+        <a href="contact.html">تواصل معنا</a>
+        <a href="results.html">🎓 نتائج الطلاب</a>
+    </nav>
+
+    <main class="container">
+
+        <section class="intro">
+            <h2>صور الأنشطة والفعاليات التعليمية</h2>
+            <p>
+                نعرض هنا الصور التي توثق الأنشطة والفعاليات والإنجازات التعليمية
+                بمدارس إدارة السنبلاوين التعليمية.
+            </p>
+        </section>
+
+        <section aria-label="صور المعرض">
+            <div id="galleryGrid" class="gallery-grid"></div>
+
+            <div id="emptyMessage" class="empty-message" hidden>
+                <h3>لا توجد صور في المعرض حاليًا</h3>
+                <p>ستظهر الصور هنا عند إضافتها من لوحة إدارة الصور.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>إدارة السنبلاوين التعليمية - محافظة الدقهلية</p>
+        <p>تطوير الموقع: محمد رضا السيد عباس</p>
+    </footer>
+
+    <script>
+        const STORAGE_KEY = "sanbalawin_gallery";
+
+        const galleryGrid = document.getElementById("galleryGrid");
+        const emptyMessage = document.getElementById("emptyMessage");
+
+        function getGalleryImages() {
+            try {
+                const savedImages = localStorage.getItem(STORAGE_KEY);
+                const images = savedImages ? JSON.parse(savedImages) : [];
+
+                return Array.isArray(images) ? images : [];
+            } catch (error) {
+                return [];
+            }
+        }
+
+        function displayGallery() {
+            const images = getGalleryImages();
+
+            galleryGrid.replaceChildren();
+            emptyMessage.hidden = images.length > 0;
+
+            images.forEach(function (item) {
+                if (!item.image) {
+                    return;
+                }
+
+                const card = document.createElement("article");
+                card.className = "gallery-card";
+
+                const image = document.createElement("img");
+                image.src = item.image;
+                image.alt = item.title || "صورة من المعرض";
+                image.loading = "lazy";
+                image.tabIndex = 0;
+
+                const content = document.createElement("div");
+                content.className = "card-content";
+
+                const title = document.createElement("h3");
+                title.textContent = item.title || "صورة من المعرض";
+
+                const description = document.createElement("p");
+                description.textContent =
+                    item.description || "صورة من أنشطة الإدارة التعليمية.";
+
+                content.append(title, description);
+                card.append(image, content);
+                galleryGrid.appendChild(card);
+            });
+
+            emptyMessage.hidden = galleryGrid.children.length > 0;
+        }
+
+        // تحميل الصور عند فتح الصفحة.
+        displayGallery();
+
+        // تحديث المعرض عند تغيير البيانات في تبويب آخر من الموقع.
+        window.addEventListener("storage", function (event) {
+            if (event.key === STORAGE_KEY || event.key === null) {
+                displayGallery();
+            }
+        });
+    </script>
+
+</body>
+</html>

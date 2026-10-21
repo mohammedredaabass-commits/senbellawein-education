@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>إدارة المدارس | إدارة السنبلاوين التعليمية</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .school-admin-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .school-admin-header {
+            background: #14532d;
+            color: white;
+            padding: 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+        }
+
+        .school-admin-header h1 {
+            margin-top: 0;
+        }
+
+        .school-admin-header p {
+            margin-bottom: 0;
+        }
+
+        .school-admin-panel {
+            background: #fff;
+            padding: 24px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .school-admin-form {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .school-admin-form .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .school-admin-form label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .school-admin-form input,
+        .school-admin-form select,
+        .school-admin-form textarea,
+        .school-search {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 7px;
+            font: inherit;
+        }
+
+        .school-admin-form textarea {
+            min-height: 85px;
+            resize: vertical;
+        }
+
+        .school-admin-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            grid-column: 1 / -1;
+        }
+
+        .school-admin-button {
+            border: none;
+            border-radius: 7px;
+            padding: 11px 18px;
+            font: inherit;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .school-save-button {
+            background: #166534;
+            color: white;
+        }
+
+        .school-cancel-button {
+            background: #e5e7eb;
+            color: #222;
+        }
+
+        .school-delete-button {
+            background: #b91c1c;
+            color: white;
+        }
+
+        .school-edit-button {
+            background: #1d4ed8;
+            color: white;
+        }
+
+        .school-search {
+            margin-bottom: 18px;
+        }
+
+        .school-table-wrapper {
+            overflow-x: auto;
+        }
+
+        .school-admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        .school-admin-table th,
+        .school-admin-table td {
+            border: 1px solid #e5e7eb;
+            padding: 12px;
+            text-align: right;
+        }
+
+        .school-admin-table th {
+            background: #f3f4f6;
+        }
+
+        .school-admin-table tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .school-row-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .school-status-message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .school-count {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .school-back-link {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 16px;
+            border-radius: 7px;
+            background: white;
+            color: #14532d;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 650px) {
+            .school-admin-form {
+                grid-template-columns: 1fr;
+            }
+
+            .school-admin-form .full-width {
+                grid-column: auto;
+            }
+
+            .school-admin-buttons {
+                grid-column: auto;
+            }
+
+            .school-admin-container {
+                padding: 12px;
+            }
+
+            .school-admin-panel {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body class="admin-page">
+
+    <main class="school-admin-container">
+
+        <header class="school-admin-header">
+            <h1>🏫 إدارة المدارس</h1>
+            <p>إضافة المدارس وتعديل بياناتها وحذفها من قائمة المدارس.</p>
+
+            <a href="admin.html" class="school-back-link">
+                ← العودة إلى لوحة التحكم
+            </a>
+        </header>
+
+        <section class="school-admin-panel">
+            <h2 id="formTitle">إضافة مدرسة جديدة</h2>
+
+            <form id="schoolForm" class="school-admin-form">
+
+                <div>
+                    <label for="schoolName">اسم المدرسة *</label>
+                    <input
+                        type="text"
+                        id="schoolName"
+                        required
+                        maxlength="150"
+                        placeholder="اكتب اسم المدرسة"
+                    >
+                </div>
+
+                <div>
+                    <label for="schoolType">المرحلة التعليمية *</label>
+                    <select id="schoolType" required>
+                        <option value="">اختر المرحلة</option>
+                        <option value="رياض أطفال">رياض أطفال</option>
+                        <option value="ابتدائي">ابتدائي</option>
+                        <option value="إعدادي">إعدادي</option>
+                        <option value="ثانوي عام">ثانوي عام</option>
+                        <option value="ثانوي فني">ثانوي فني</option>
+                        <option value="أخرى">أخرى</option>
+                    </select>
+                </div>
+
+                <div class="full-width">
+                    <label for="schoolAddress">عنوان المدرسة</label>
+                    <input
+                        type="text"
+                        id="schoolAddress"
+                        maxlength="250"
+                        placeholder="القرية أو المدينة والعنوان"
+                    >
+                </div>
+
+                <div>
+                    <label for="schoolPhone">رقم هاتف المدرسة</label>
+                    <input
+                        type="tel"
+                        id="schoolPhone"
+                        maxlength="30"
+                        placeholder="رقم الهاتف إن وجد"
+                    >
+                </div>
+
+                <div>
+                    <label for="schoolPrincipal">اسم مدير المدرسة</label>
+                    <input
+                        type="text"
+                        id="schoolPrincipal"
+                        maxlength="150"
+                        placeholder="اسم المدير إن وجد"
+                    >
+                </div>
+
+                <div class="full-width">
+    <label for="schoolWebsite">رابط موقع المدرسة (اختياري)</label>
+    <input
+        type="url"
+        id="schoolWebsite"
+        maxlength="500"
+        placeholder="https://example.com"
+    >
+    <small>اترك الخانة فارغة إذا لم يكن للمدرسة موقع إلكتروني.</small>
+</div>
+
+<div class="full-width">
+    <label for="schoolDescription">معلومات إضافية</label>
+    <textarea
+        id="schoolDescription"
+        maxlength="1000"
+        placeholder="أي معلومات إضافية عن المدرسة"
+    ></textarea>
+</div>
+
+                <div class="school-admin-buttons">
+                    <button
+                        type="submit"
+                        class="school-admin-button school-save-button"
+                        id="saveSchoolButton"
+                    >
+                        إضافة المدرسة
+                    </button>
+
+                    <button
+                        type="button"
+                        class="school-admin-button school-cancel-button"
+                        id="cancelEditButton"
+                        hidden
+                    >
+                        إلغاء التعديل
+                    </button>
+                </div>
+
+            </form>
+
+            <p
+                id="schoolStatusMessage"
+                class="school-status-message"
+                role="status"
+                aria-live="polite"
+            ></p>
+        </section>
+
+        <section class="school-admin-panel">
+            <h2>المدارس المسجلة</h2>
+
+            <input
+                type="search"
+                id="schoolSearch"
+                class="school-search"
+                placeholder="ابحث باسم المدرسة أو المرحلة أو العنوان..."
+                aria-label="البحث في المدارس"
+            >
+
+            <p id="schoolCount" class="school-count"></p>
+
+            <div class="school-table-wrapper">
+                <table class="school-admin-table">
+                    <thead>
+                        <tr>
+                            <th>م</th>
+                            <th>اسم المدرسة</th>
+                            <th>المرحلة</th>
+                            <th>العنوان</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="schoolsTableBody"></tbody>
+                </table>
+            </div>
+
+            <p id="emptySchoolsMessage" hidden>
+                لا توجد مدارس مسجلة حتى الآن.
+            </p>
+
+            <p id="noSearchResultsMessage" hidden>
+                لا توجد مدارس تطابق كلمات البحث.
+            </p>
+        </section>
+
+        <footer>
+            <p>تصميم وتطوير الموقع: <strong>محمد رضا السيد عباس</strong></p>
+            <p>إدارة السنبلاوين التعليمية - محافظة الدقهلية</p>
+        </footer>
+
+    </main>
+
+    <script>
+        const STORAGE_KEY = "sanbalawin_schools";
+
+        const schoolForm = document.getElementById("schoolForm");
+        const schoolName = document.getElementById("schoolName");
+        const schoolType = document.getElementById("schoolType");
+        const schoolAddress = document.getElementById("schoolAddress");
+        const schoolPhone = document.getElementById("schoolPhone");
+        const schoolPrincipal = document.getElementById("schoolPrincipal");
+const schoolWebsite = document.getElementById("schoolWebsite");
+const schoolDescription = document.getElementById("schoolDescription");
+
+        const schoolsTableBody = document.getElementById("schoolsTableBody");
+        const schoolSearch = document.getElementById("schoolSearch");
+        const schoolCount = document.getElementById("schoolCount");
+
+        const emptySchoolsMessage =
+            document.getElementById("emptySchoolsMessage");
+
+        const noSearchResultsMessage =
+            document.getElementById("noSearchResultsMessage");
+
+        const schoolStatusMessage =
+            document.getElementById("schoolStatusMessage");
+
+        const formTitle = document.getElementById("formTitle");
+        const saveSchoolButton =
+            document.getElementById("saveSchoolButton");
+
+        const cancelEditButton =
+            document.getElementById("cancelEditButton");
+
+        let schools = [];
+        let editingSchoolId = null;
+
+        function createId() {
+            if (window.crypto && typeof window.crypto.randomUUID === "function") {
+                return window.crypto.randomUUID();
+            }
+
+            return Date.now().toString(36) +
+                Math.random().toString(36).slice(2);
+        }
+
+        function loadSchools() {
+            try {
+                const savedData = localStorage.getItem(STORAGE_KEY);
+
+                if (savedData === null) {
+                    schools = [];
+                    return;
+                }
+
+                const parsedData = JSON.parse(savedData);
+
+                if (!Array.isArray(parsedData)) {
+                    throw new Error("بيانات المدارس ليست قائمة صحيحة.");
+                }
+
+                schools = parsedData.map(function (school) {
+                    return {
+                        ...school,
+                        id: school.id || createId(),
+                        name: String(
+                            school.name ?? school.schoolName ?? ""
+                        ),
+                        type: String(
+                            school.type ?? school.stage ?? ""
+                        ),
+                        address: String(school.address ?? ""),
+                        phone: String(school.phone ?? ""),
+                        principal: String(school.principal ?? ""),
+                        description: String(school.description ?? "")
+                    };
+                });
+
+            } catch (error) {
+                console.error("تعذر تحميل المدارس:", error);
+
+                schoolStatusMessage.textContent =
+                    "تعذر قراءة بيانات المدارس. لم نغيّر البيانات المحفوظة.";
+
+                schools = [];
+            }
+        }
+
+        function saveSchools() {
+            try {
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify(schools)
+                );
+
+                return true;
+
+            } catch (error) {
+                console.error("تعذر حفظ المدارس:", error);
+
+                schoolStatusMessage.textContent =
+                    "تعذر حفظ البيانات. تحقق من مساحة التخزين وإعدادات المتصفح.";
+
+                return false;
+            }
+        }
+
+        function createCell(text) {
+            const cell = document.createElement("td");
+            cell.textContent = text || "—";
+            return cell;
+        }
+
+        function renderSchools() {
+            schoolsTableBody.replaceChildren();
+
+            const query = schoolSearch.value
+                .trim()
+                .toLocaleLowerCase("ar");
+
+            const filteredSchools = schools.filter(function (school) {
+                const searchableText = [
+                    school.name,
+                    school.type,
+                    school.address,
+                    school.phone,
+                    school.principal
+                ].join(" ").toLocaleLowerCase("ar");
+
+                return searchableText.includes(query);
+            });
+
+            schoolCount.textContent =
+                "عدد المدارس المسجلة: " + schools.length +
+                " | نتائج البحث: " + filteredSchools.length;
+
+            emptySchoolsMessage.hidden = schools.length !== 0;
+
+            noSearchResultsMessage.hidden =
+                schools.length === 0 ||
+                filteredSchools.length !== 0;
+
+            filteredSchools.forEach(function (school, index) {
+                const row = document.createElement("tr");
+
+                row.appendChild(createCell(String(index + 1)));
+                row.appendChild(createCell(school.name));
+                row.appendChild(createCell(school.type));
+                row.appendChild(createCell(school.address));
+
+                const actionsCell = document.createElement("td");
+                const actions = document.createElement("div");
+                actions.className = "school-row-actions";
+
+                const editButton = document.createElement("button");
+                editButton.type = "button";
+                editButton.className =
+                    "school-admin-button school-edit-button";
+                editButton.textContent = "تعديل";
+
+                editButton.addEventListener("click", function () {
+                    editSchool(school.id);
+                });
+
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.className =
+                    "school-admin-button school-delete-button";
+                deleteButton.textContent = "حذف";
+
+                deleteButton.addEventListener("click", function () {
+                    deleteSchool(school.id);
+                });
+
+                actions.append(editButton, deleteButton);
+                actionsCell.appendChild(actions);
+                row.appendChild(actionsCell);
+
+                schoolsTableBody.appendChild(row);
+            });
+        }
+
+        function resetForm() {
+            schoolForm.reset();
+            editingSchoolId = null;
+
+            formTitle.textContent = "إضافة مدرسة جديدة";
+            saveSchoolButton.textContent = "إضافة المدرسة";
+            cancelEditButton.hidden = true;
+        }
+
+        function editSchool(id) {
+            const school = schools.find(function (item) {
+                return item.id === id;
+            });
+
+            if (!school) {
+                schoolStatusMessage.textContent =
+                    "لم يتم العثور على المدرسة المطلوبة.";
+                return;
+            }
+
+            editingSchoolId = id;
+
+            schoolName.value = school.name;
+            schoolType.value = school.type;
+            schoolAddress.value = school.address;
+            schoolPhone.value = school.phone;
+            schoolPrincipal.value = school.principal;
+schoolWebsite.value = school.website || "";
+schoolDescription.value = school.description;
+
+            formTitle.textContent = "تعديل بيانات المدرسة";
+            saveSchoolButton.textContent = "حفظ التعديلات";
+            cancelEditButton.hidden = false;
+
+            schoolStatusMessage.textContent =
+                "عدّل البيانات المطلوبة ثم اضغط حفظ التعديلات.";
+
+            schoolForm.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+            schoolName.focus();
+        }
+
+        function deleteSchool(id) {
+            const school = schools.find(function (item) {
+                return item.id === id;
+            });
+
+            if (!school) {
+                return;
+            }
+
+            const confirmed = window.confirm(
+                'هل تريد حذف مدرسة "' + school.name + '"؟'
+            );
+
+            if (!confirmed) {
+                return;
+            }
+
+            const previousSchools = schools;
+
+            schools = schools.filter(function (item) {
+                return item.id !== id;
+            });
+
+            if (!saveSchools()) {
+                schools = previousSchools;
+                return;
+            }
+
+            if (editingSchoolId === id) {
+                resetForm();
+            }
+
+            schoolStatusMessage.textContent =
+                "تم حذف المدرسة بنجاح.";
+
+            renderSchools();
+        }
+
+        schoolForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const name = schoolName.value.trim();
+            const type = schoolType.value;
+            const address = schoolAddress.value.trim();
+            const phone = schoolPhone.value.trim();
+            const principal = schoolPrincipal.value.trim();
+const website = schoolWebsite.value.trim();
+const description = schoolDescription.value.trim();
+
+            if (!name || !type) {
+    schoolStatusMessage.textContent =
+        "يرجى إدخال اسم المدرسة واختيار المرحلة التعليمية.";
+    return;
+}
+
+if (website) {
+    try {
+        const parsedWebsite = new URL(website);
+
+        if (
+            parsedWebsite.protocol !== "https:" &&
+            parsedWebsite.protocol !== "http:"
+        ) {
+            throw new Error("رابط غير صالح");
+        }
+    } catch (error) {
+        schoolStatusMessage.textContent =
+            "الرابط غير صحيح. اكتب رابطًا يبدأ بـ https:// أو http://، أو اترك الخانة فارغة.";
+
+        schoolWebsite.focus();
+        return;
+    }
+}
+
+            const duplicate = schools.some(function (school) {
+                return school.name.trim().toLocaleLowerCase("ar") ===
+                    name.toLocaleLowerCase("ar") &&
+                    school.id !== editingSchoolId;
+            });
+
+            if (duplicate) {
+                schoolStatusMessage.textContent =
+                    "توجد مدرسة مسجلة بهذا الاسم بالفعل.";
+                return;
+            }
+
+            const previousSchools = schools.map(function (school) {
+                return { ...school };
+            });
+
+            if (editingSchoolId !== null) {
+                schools = schools.map(function (school) {
+                    if (school.id !== editingSchoolId) {
+                        return school;
+                    }
+
+                    return {
+                        ...school,
+                        name: name,
+                        schoolName: name,
+                        type: type,
+                        stage: type,
+                        address: address,
+                        phone: phone,
+                        principal: principal,
+                        description: description
+                    };
+                });
+
+            } else {
+               schools.push({
+    id: createId(),
+    name: name,
+    schoolName: name,
+    type: type,
+    stage: type,
+    address: address,
+    phone: phone,
+    principal: principal,
+    website: website,
+    description: description
+});
+            }
+
+            if (!saveSchools()) {
+                schools = previousSchools;
+                return;
+            }
+
+            const wasEditing = editingSchoolId !== null;
+
+            resetForm();
+
+            schoolStatusMessage.textContent = wasEditing
+                ? "تم تعديل بيانات المدرسة بنجاح."
+                : "تمت إضافة المدرسة بنجاح.";
+
+            renderSchools();
+        });
+
+        cancelEditButton.addEventListener("click", function () {
+            resetForm();
+            schoolStatusMessage.textContent =
+                "تم إلغاء التعديل.";
+        });
+
+        schoolSearch.addEventListener("input", renderSchools);
+
+        loadSchools();
+        renderSchools();
+    </script>
+
+</body>
+</html>
